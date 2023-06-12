@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const Button = (props) => {
-  console.log(props)
+  console.log(props.text)
   return (
     <button onClick={props.handleClick}>{props.text}</button>  
   )
@@ -9,25 +9,47 @@ const Button = (props) => {
 
 const Statistics = (props) => {
   console.log(props)
-  const all = (props.good + props.bad + props.neutral)
-  const average = ((props.good - props.bad) / all) 
-  const positive = (props.good / all * 100)
+  const all = props.good + props.bad + props.neutral
+  const average = (props.good - props.bad) / all
+  const positive = props.good / all * 100
   
+  if (all === 0) {
+    return (
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
   return (
     <div>
       <h1>statistics</h1>
-        <p>good {props.good}</p>
-        <p>neutral {props.neutral}</p>
-        <p>bad {props.bad}</p>
-        <p>all {all}</p>
-        <p>average {average}</p>
-        <p>positive {positive} %</p>
+        <table>
+          <tbody>
+            <StatisticLine text="good" value={props.good}/>
+            <StatisticLine text="neutral" value={props.neutral}/>
+            <StatisticLine text="bad" value={props.bad} />
+            <StatisticLine text="all" value={all} />
+            <StatisticLine text="average" value={average} />
+            <StatisticLine text="positive" value={positive} text2="%"/>
+         </tbody>
+        </table>   
     </div>
   )
 }
 
+const StatisticLine = (props) => {
+  console.log()
+  return (
+    
+     <tr>
+      <td>{props.text}</td>
+      <td>{props.value} {props.text2}</td> 
+     </tr>
+    
+  )
+}
+
 const App = () => {
-  // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
