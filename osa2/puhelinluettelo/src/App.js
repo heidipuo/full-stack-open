@@ -3,30 +3,34 @@ import axios from 'axios'
 
 import personService from './services/persons'
 
-const Person = ({person}) => {
-  console.log("person", {person})
+const Person = (props) => {
+  console.log("person", props)
   return(
-  <p>{person.name} {person.number}</p>
+ 
+  <p>{props.person.name} {props.person.number} 
+  <button type="submit" onClick={props.deletePerson(props.person.id)}>delete</button></p>
   )
 }
 
-const Persons = ({persons}) => {
-  console.log("persons", )
+const Persons = (props) => {
+  console.log("persons", props )
   return(
     <div>
-      {persons.map((person, i) => 
-        <Person key={i} person={person}/>
-      )}
-    </div>
+      {props.persons.map((person, i) => 
+        <Person key={i} person={person} deletePerson={props.deletePerson}/>  
+      )} 
+    </div> 
   )
 }
 
 const Filter = (props) => {
   console.log("filter", props)
   return(
-  <div>
-    filter shown with <input onChange={props.handleSearcChange} />
-  </div>
+    <div>
+      filter shown with <input onChange={props.handleSearcChange} />
+    </div>
+     
+    
   )
 }
 
@@ -83,6 +87,21 @@ const App = () => {
       })
     }
   }
+
+  const deletePerson = (id) => (event) =>  {
+    event.preventDefault()
+    console.log("deleting a person")
+    //const id = person.id
+    personService
+      .deletePerson(id)
+      .then( () => {
+        setPersons(persons.filter(person => person.id !== id))
+        console.log("poistettu")
+      }
+       
+      )
+
+  }
   
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -107,7 +126,7 @@ const App = () => {
         newNumber={newNumber} handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow}/>
+      <Persons persons={personsToShow} deletePerson={deletePerson}/>
     </div>  
   )
 }
