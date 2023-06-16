@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Person = ({person}) => {
   console.log("person", {person})
@@ -45,14 +46,21 @@ const PersonForm = (props) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', 
-      number: '040-1234567' }
-  ]) 
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searhText, setSearchText] = useState('')
-  const [showSearched, setShowSearched] = useState(true)
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -82,9 +90,7 @@ const App = () => {
     setSearchText(event.target.value)
   }
 
-  const personsToShow = showSearched
-    ? persons.filter(person => person.name.toLowerCase().includes(searhText.toLowerCase()))
-    : persons
+  const personsToShow = persons.filter(person => person.name.toLowerCase().includes(searhText.toLowerCase()))
     
   return (
     <div>
