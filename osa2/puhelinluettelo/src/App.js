@@ -5,10 +5,10 @@ import personService from './services/persons'
 
 const Person = (props) => {
   console.log("person", props)
+  
   return(
- 
-  <p>{props.person.name} {props.person.number} 
-  <button type="submit" onClick={props.deletePerson(props.person.id)}>delete</button></p>
+    <p>{props.person.name} {props.person.number} 
+    <button type="submit" onClick={props.deletePerson(props.person.id)}>delete</button></p>
   )
 }
 
@@ -24,13 +24,11 @@ const Persons = (props) => {
 }
 
 const Filter = (props) => {
-  console.log("filter", props)
+  //console.log("filter", props)
   return(
     <div>
       filter shown with <input onChange={props.handleSearcChange} />
     </div>
-     
-    
   )
 }
 
@@ -70,7 +68,7 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     var names = persons.map(person => person.name) 
-    console.log( newName, persons, names)
+    console.log('Uusi', newName, persons, 'nimet', names)
     if (names.includes(newName)) {
       alert(`${newName} is already added to the phonebook`)
       setNewName('') 
@@ -90,17 +88,16 @@ const App = () => {
 
   const deletePerson = (id) => (event) =>  {
     event.preventDefault()
-    console.log("deleting a person")
-    //const id = person.id
-    personService
-      .deletePerson(id)
-      .then( () => {
-        setPersons(persons.filter(person => person.id !== id))
-        console.log("poistettu")
-      }
-       
-      )
-
+    var personToDelete = persons.find(person => person.id === id)
+    if (window.confirm(`Do you want to delete ${personToDelete.name}?`)){
+      console.log("deleting a person")
+      personService
+        .deletePerson(id)
+        .then( () => {
+          setPersons(persons.filter(person => person.id !== id))
+          console.log("poistettu")
+        })
+    }
   }
   
   const handleNameChange = (event) => {
