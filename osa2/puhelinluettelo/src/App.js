@@ -24,7 +24,6 @@ const Persons = (props) => {
 }
 
 const Filter = (props) => {
-  //console.log("filter", props)
   return(
     <div>
       filter shown with <input onChange={props.handleSearcChange} />
@@ -33,7 +32,6 @@ const Filter = (props) => {
 }
 
 const PersonForm = (props) => {
-  console.log("form", props)
   return(
     <form onSubmit={props.addPerson}>
     <div>
@@ -68,13 +66,16 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     var names = persons.map(person => person.name) 
-    console.log('Uusi', newName, persons, 'nimet', names)
-    if (names.includes(newName)) {
-      alert(`${newName} is already added to the phonebook`)
+    var newNameTrim = newName.trim()
+    console.log('Uusi', newNameTrim, persons, 'nimet', names)
+    if (names.includes(newNameTrim)) {
+      if (window.confirm(`${newNameTrim} is already added to the phonebook. Do you want to replace the old number with new one?`)) {
+        replacePerson(newNameTrim, newNumber)
+      }
       setNewName('') 
       setNewNumber('')
     }else{
-     const person = {name: newName, number: newNumber}
+     const person = {name: newNameTrim, number: newNumber}
     
      personService
       .create(person)
@@ -98,6 +99,20 @@ const App = () => {
           console.log("poistettu")
         })
     }
+  }
+
+  const replacePerson = (newName, newNumber) => {
+      const person = persons.find(person => person.name === newName)
+      const personWithNewNumber = {name: person.name, number: newNumber, id: person.id}
+
+      personService
+        .replacePerson(personWithNewNumber)
+        .then(returnedPerson => {
+          console.log('returned', returnedPerson)
+          setPersons(persons.map(person => person.id !== personWithNewNumber.id ? person : returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
   }
   
   const handleNameChange = (event) => {
