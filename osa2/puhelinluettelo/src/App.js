@@ -47,11 +47,23 @@ const PersonForm = (props) => {
   )
 }
 
+const Notification = (props) => {
+  if (props.message === '') {
+    return null
+  }
+
+  return (
+      <div className={props.style}> {props.message}</div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searhText, setSearchText] = useState('')
+  const [message, setMessage] = useState('')
+  const [notificationStyle, setNotificationStyle] = useState('')
 
   useEffect(() => {
     console.log('effect')
@@ -66,21 +78,23 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     var names = persons.map(person => person.name) 
-    var newNameTrim = newName.trim()
-    console.log('Uusi', newNameTrim, persons, 'nimet', names)
-    if (names.includes(newNameTrim)) {
-      if (window.confirm(`${newNameTrim} is already added to the phonebook. Do you want to replace the old number with new one?`)) {
-        replacePerson(newNameTrim, newNumber)
+    console.log('Uusi', newName, persons, 'nimet', names)
+    if (names.includes(newName.trim())) {
+      if (window.confirm(`${newName.trim()} is already added to the phonebook. Do you want to replace the old number with new one?`)) {
+        replacePerson(newName.trim(), newNumber)
       }
       setNewName('') 
       setNewNumber('')
     }else{
-     const person = {name: newNameTrim, number: newNumber}
+     const person = {name: newName.trim(), number: newNumber}
     
      personService
       .create(person)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setNotificationStyle('success')
+        setMessage(`${returnedPerson.name} added`)
+        setEmptyMessage()
         setNewName('')
         setNewNumber('')
       })
@@ -96,6 +110,9 @@ const App = () => {
         .deletePerson(id)
         .then( () => {
           setPersons(persons.filter(person => person.id !== id))
+          setNotificationStyle('success')
+          setMessage(`${personToDelete.name} deleted`)
+          setEmptyMessage()
           console.log("poistettu")
         })
     }
@@ -108,13 +125,28 @@ const App = () => {
       personService
         .replacePerson(personWithNewNumber)
         .then(returnedPerson => {
-          console.log('returned', returnedPerson)
           setPersons(persons.map(person => person.id !== personWithNewNumber.id ? person : returnedPerson))
+          setNotificationStyle('success')
+          setMessage(`The number of ${returnedPerson.name} has been changed to ${returnedPerson.number}`)
+          setEmptyMessage()
           setNewName('')
           setNewNumber('')
         })
+        .catch(error => {
+          setNotificationStyle('error')
+          setMessage(`Information of ${personWithNewNumber.name} has already been deleted from the server`)
+          setTimeout(() => {
+            setMessage('')
+          }, 5000)
+        })
   }
   
+  const setEmptyMessage = () => {
+    setTimeout(() => {
+      setMessage('')
+    }, 2000)
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -128,10 +160,11 @@ const App = () => {
   }
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(searhText.toLowerCase()))
-    
+  
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message = {message} style = {notificationStyle} />
       <Filter handleSearcChange={handleSearcChange}/>
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange}
@@ -142,5 +175,5 @@ const App = () => {
     </div>  
   )
 }
-
+ 
 export default App
