@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 
 
@@ -11,7 +11,7 @@ const Form = (props) => {
   )
 }
 
-const Countries = (props) => {
+const Display = (props) => {
   
   if (props.countries.length > 10) {
     return <div>Too many matches, specify another filter</div>
@@ -19,28 +19,22 @@ const Countries = (props) => {
   return(
     <div>
         {props.countries.map((country, i) =>
-          <CountryName key={i} country={country} /> 
+           <div>
+            {country.name.common}  <button type="submit" onClick={() => props.setNewCountry(country.name.common)} >show</button>
+          </div>
           )}
     </div>
     )
   }else if (props.countries.length === 1){
     return(
       <div>
-        <CountryInfo country={props.countries[0]} />
+        <Country country={props.countries[0]} />
       </div>
     )
   }
 }
 
-const CountryName = (props) => {
-  return(
-    <div>
-      {props.country.name.common}
-    </div>
-  )
-}
-
-const CountryInfo = (props) => {
+const Country = (props) => {
   console.log('info', props.country)
   return(
     <div>
@@ -81,13 +75,14 @@ const App = () => {
     setNewCountry(event.target.value)
   }
 
+
   const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(newCountry.toLowerCase()))
 
   return (
     <div>
       <h1>Country info</h1>
       <Form newCountry={newCountry} handleCountryChange={handleCountryChange} getCountryInfo={getCountryInfo} countries={countries}/>
-      <Countries countries={countriesToShow}/>
+      <Display countries={countriesToShow} setNewCountry={setNewCountry}/>
     </div>
   )
 }
