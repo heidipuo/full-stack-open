@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import Country from './components/Country'
 
 const Form = (props) => {
   console.log('form', props.newCountry)
@@ -33,7 +34,7 @@ const Display = (props) => {
     )
   }
 }
-
+/*
 const Country = (props) => {
   console.log('info', props.country)
   return(
@@ -48,17 +49,18 @@ const Country = (props) => {
           ))}
         </ul>
         <img src={props.country.flags.png} alt={`${props.country.name.common} flag`} />  
+        <Weather city={props.country.capital}/>
     </div>
     
   )
 }
-
+*/
 
 const App = () => {
   const[newCountry, setNewCountry] = useState('')
   const[countries, setCountries] = useState([])
 
-  
+
   const getCountryInfo = () => {
     axios
       .get('https://studies.cs.helsinki.fi/restcountries/api/all')
