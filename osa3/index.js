@@ -1,7 +1,9 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 
 morgan.token('body', req => JSON.stringify(req.body))
@@ -71,7 +73,6 @@ const generateId = () => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
-    console.log(request.body)
 
     if (!body.name || !body.number) {
         return response.status(400).json({ 
@@ -92,14 +93,13 @@ app.post('/api/persons', (request, response) => {
         id: generateId()
     }
 
-    console.log('id', person.id)
     persons = persons.concat(person)
 
     response.json(person)
   })
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`) 
 })
