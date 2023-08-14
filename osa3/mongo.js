@@ -30,6 +30,7 @@ if (process.argv.length > 3){
 
     person.save().then(result => {
      console.log('person saved!')
+     console.log(process.env)
     mongoose.connection.close()
     })
 }else{
