@@ -10,7 +10,8 @@
     "build:ui": "@powershell Remove-Item -Recurse -Force build && ../osa2/puhelinluettelo/ && npm run build && @powershell Copy-Item build -Recurse ../../osa3",
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy",
-    "logs:prod": "fly logs"
+    "logs:prod": "fly logs",
+    "lint": "eslint ."
   },
   "author": "Heidi Puotiniemi",
   "license": "ISC",
@@ -24,6 +25,8 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.3",
+    "eslint": "^8.47.0",
+    "eslint-plugin-react": "^7.33.1",
     "nodemon": "^3.0.1"
   }
 }

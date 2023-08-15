@@ -4,3 +4,5 @@ Dockerfile
 .dockerignore
 build/
 .env
+.eslintrc.js
+.eslintignore
