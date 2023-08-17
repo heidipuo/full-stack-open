@@ -1,4 +1,4 @@
-const { dummy, totalLikes, favoriteBlog, mostBlogs } = require('../utils/list_helper')
+const { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes } = require('../utils/list_helper')
 const blogs = require('../test_blogs.json')
 
 test('dummy returns one', () => {
@@ -54,14 +54,14 @@ describe('favorite blog', () => {
 
 describe('most blogs', () => {
 
-  test('when list has only one blog, defines the author with blog number of 1', () => {
+  test('when list has only one blog, finds the author with blog number of 1', () => {
     expect(mostBlogs([blogs[0]])).toEqual({
       author: 'Michael Chan',
       blogs: 1
     })
   })
 
-  test('when list has several blogs, defines the author with most blogs', () => {
+  test('when list has several blogs, finds the author with most blogs', () => {
     expect(mostBlogs(blogs)).toEqual({
       author: 'Robert C. Martin',
       blogs: 3
@@ -69,7 +69,28 @@ describe('most blogs', () => {
   })
 
   test('when the list is empty, returns an object with empty values', () => {
-    expect(mostBlogs([])).toEqual({ 'author': '', 'blogs': 0 }
-    )
+    expect(mostBlogs([])).toEqual({ 'author': '', 'blogs': 0 })
   })
+})
+
+describe('most likes', () => {
+
+  test('when list has only one blog, finds the author and the likes', () => {
+    expect(mostLikes([blogs[0]])).toEqual({
+      author: 'Michael Chan',
+      likes: 7
+    })
+  })
+
+  test('when list has several blogs, finds the author with most likes', () => {
+    expect(mostLikes(blogs)).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    })
+  })
+
+  test('when the list is empty, returns an object with empty values', () => {
+    expect(mostLikes([])).toEqual({ 'author': '', 'likes': 0 })
+  })
+
 })
