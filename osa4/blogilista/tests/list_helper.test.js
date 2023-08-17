@@ -43,21 +43,33 @@ describe('favorite blog', () => {
     )
   })
 
-  test('when the list is empty, equals the likes of that', () => {
-    expect(favoriteBlog([])).toBe(null)
+  test('when the list is empty, returns an object with empty values', () => {
+    expect(favoriteBlog([])).toEqual({
+      'title': '',
+      'author': '',
+      'likes': 0
+    })
   })
 })
 
 describe('most blogs', () => {
-  test('when list has several blogs, equals the likes of that', () => {
-    expect(mostBlogs(blogs)).toBe(36)
+
+  test('when list has only one blog, defines the author with blog number of 1', () => {
+    expect(mostBlogs([blogs[0]])).toEqual({
+      author: 'Michael Chan',
+      blogs: 1
+    })
   })
 
-  /*test('when list has only one blog, equals the likes of that', () => {
-    expect(mostBlogs([blogs[0]])).toBe(7)
+  test('when list has several blogs, defines the author with most blogs', () => {
+    expect(mostBlogs(blogs)).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
+    })
   })
 
-  test('when the list is empty, equals the likes of that', () => {
-    expect(totalLikes([])).toBe(0)
-  })*/
+  test('when the list is empty, returns an object with empty values', () => {
+    expect(mostBlogs([])).toEqual({ 'author': '', 'blogs': 0 }
+    )
+  })
 })
