@@ -3,12 +3,11 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-
-const initialBlogs = require('../test_blogs.json')
+const helper = require('./test_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  await Blog.insertMany(initialBlogs)
+  await Blog.insertMany(helper.initialBlogs)
 })
 
 test('blogs are returned as json', async () => {
@@ -21,7 +20,7 @@ test('blogs are returned as json', async () => {
 test('the amount of blogs is correct', async () => {
   const response = await api.get('/api/blogs')
 
-  expect(response.body).toHaveLength(initialBlogs.length)
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
 test('the blog identification is called id', async () => {
@@ -52,11 +51,10 @@ test('a valid blog can be added ', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/blogs')
+  const blogs = await helper.blogsInDb()
+  const titles = blogs.map(r => r.title)
 
-  const titles = response.body.map(r => r.title)
-
-  expect(response.body).toHaveLength(initialBlogs.length + 1)
+  expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
   expect(titles).toContain(
     'We can code'
   )
@@ -90,9 +88,9 @@ test('error is given if there´s no title field', async () => {
     .send(newBlog)
     .expect(400)
 
-  const response = await api.get('/api/blogs')
+  const blogs = await helper.blogsInDb()
 
-  expect(response.body).toHaveLength(initialBlogs.length)
+  expect(blogs).toHaveLength(helper.initialBlogs.length)
 
 })
 
@@ -108,9 +106,9 @@ test('error is given if there´s no url field', async () => {
     .send(newBlog)
     .expect(400)
 
-  const response = await api.get('/api/blogs')
+  const blogs = await helper.blogsInDb()
 
-  expect(response.body).toHaveLength(initialBlogs.length)
+  expect(blogs).toHaveLength(helper.initialBlogs.length)
 })
 
 afterAll(async () => {
