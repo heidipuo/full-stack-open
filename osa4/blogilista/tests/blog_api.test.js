@@ -76,7 +76,7 @@ test('if amount of likes is not given, likes is set to 0', async () => {
   expect(response.body.likes).toBe(0)
 })
 
-test('error is given if there´s no title field', async () => {
+test('error is given if there`s no title field', async () => {
   const newBlog = {
     author: 'John No-Title',
     url : 'http://www.u.arizona.edu/~rubinson/copyright_violations/-.html',
@@ -94,7 +94,7 @@ test('error is given if there´s no title field', async () => {
 
 })
 
-test('error is given if there´s no url field', async () => {
+test('error is given if there`s no url field', async () => {
   const newBlog = {
     title: 'No url here',
     author: 'John Johnson',
@@ -109,6 +109,21 @@ test('error is given if there´s no url field', async () => {
   const blogs = await helper.blogsInDb()
 
   expect(blogs).toHaveLength(helper.initialBlogs.length)
+})
+
+test('deleting a blog', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+
+  const ids = blogsAtEnd.map(blog => blog.id)
+  expect(ids).not.toContain(blogToDelete.id)
 })
 
 afterAll(async () => {
