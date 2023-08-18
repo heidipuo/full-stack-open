@@ -77,10 +77,12 @@ test('if amount of likes is not given, likes is set to 0', async () => {
 
   expect(response.body.likes).toBe(0)
 })
-/*
-test('blog without content is not added', async () => {
+
+test('error is given if there´s no title field', async () => {
   const newBlog = {
-    title: 'Hello world'
+    author: 'John No-Title',
+    url : 'http://www.u.arizona.edu/~rubinson/copyright_violations/-.html',
+    likes: 9,
   }
 
   await api
@@ -92,7 +94,24 @@ test('blog without content is not added', async () => {
 
   expect(response.body).toHaveLength(initialBlogs.length)
 
-})*/
+})
+
+test('error is given if there´s no url field', async () => {
+  const newBlog = {
+    title: 'No url here',
+    author: 'John Johnson',
+    likes: 9,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const response = await api.get('/api/blogs')
+
+  expect(response.body).toHaveLength(initialBlogs.length)
+})
 
 afterAll(async () => {
   await mongoose.connection.close()
