@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
+import LogoutForm from './components/LogoutForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
-
 
  
 
@@ -17,6 +19,7 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [message, setMessage] = useState('')
   const [notificationStyle, setNotificationStyle] = useState('')
+  const [addBlogVisible, setAddBlogVisible] = useState(false)
 
 
   useEffect(() => {
@@ -51,9 +54,9 @@ const App = () => {
       setNotificationStyle('success')
       setEmptyMessage()
     }catch (exception) {
-      console.log('errpr', exception.response)
+      console.log('error', exception.response)
       if (exception.response.status === 400) {
-      setMessage('Could not add a message. blog title and url are required.')
+      setMessage('Could not add a message. Blog title and url are required.')
       setNotificationStyle('error')
       setTimeout(() => {
         setMessage('')
@@ -90,9 +93,13 @@ const App = () => {
     }
     setUsername('')
     setPassword('')
-
-    
   }
+
+
+  const hideWhenVisible = {display: addBlogVisible ? 'none' : ''}
+
+  const showWhenVisible = {display: addBlogVisible ? '' : 'none' }
+
 
 const handleLogout = (event) => {
   event.preventDefault()
@@ -100,96 +107,47 @@ const handleLogout = (event) => {
 
   window.localStorage.removeItem('loggedBlogappUser')
   setUser(null)
-
 }
 
-  const loginForm = () => (
-    <><h2>Log in to application</h2>
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)} />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)} />
-      </div>
-      <button type="submit">login</button>
-    </form></>      
-  )
-
- 
-
-  const blogForm = () => (
-    <div>
-    <h2>Create a blog</h2>
-    <form onSubmit={addBlog}>
-     <ul> 
-      <li>
-        title
-        <input
-        type='text'
-        value={title}
-        name="Title"
-        onChange={({target}) => setTitle(target.value)}
-      />
-      </li>
-      <li>author
-      <input
-        type='text'
-        value={author}
-        name="Author"
-        onChange={({target}) => setAuthor(target.value)}
-      />
-      </li>
-      <li>url
-      <input
-        type='text'
-        value={url}
-        name="url"
-        onChange={({target}) => setUrl(target.value)}
-      />
-      </li>
-      </ul>
-      <button type="submit">create</button>
-    </form>
-     </div> 
-  )
-  const LogoutForm = () => (
-    <form onSubmit={handleLogout}>
-    <button type="submit">logout</button>
-    </form>
-  )
- 
-
-  const setEmptyMessage = () => {
+const setEmptyMessage = () => {
     setTimeout(() => {
       setMessage('')
     }, 2000)
   }
 
+  if (user === null) {
+    return (
+      <div>
+       <Notification message={message} style={notificationStyle}/>
+       <LoginForm username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleLogin={handleLogin}/>
+     </div>
+      )
+  }
+   
   return (
     <div>
-
-    <Notification message={message} style={notificationStyle}/>
-
-    {!user && loginForm()}
-    {user && <div>
         <h2>blogs</h2>
-        <p>{user.name} logged in {LogoutForm()}</p>
-         {blogForm()}
-        <Blogs blogs={blogs} />
-      </div>}
-    
-    
+        <Notification message={message} style={notificationStyle}/>
+        <p>{user.name} logged in <LogoutForm handleLogout={handleLogout}/></p>
+         <div style={hideWhenVisible}>
+          <button onClick={() => setAddBlogVisible(true)}>add blog</button>
+         </div>
+         <div className={'addBlog'} style={showWhenVisible}>
+         <BlogForm addBlog={addBlog}
+            title={title}
+            author={author}
+            url={url}
+            handleTitleChange={({target}) => setTitle(target.value)}
+            handleAuthorChange={({target}) => setAuthor(target.value)}
+            handleUrlChange={({target}) => setUrl(target.value)}
+            />
+            <button onClick={() => setAddBlogVisible(false)}>cancel</button>
+        </div>
+        <Blogs blogs={blogs} />  
     </div>
   )
 }

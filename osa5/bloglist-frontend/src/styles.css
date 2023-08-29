@@ -23,3 +23,7 @@ ul {
     margin-bottom: 10px;
 }
 
+.addBlog {
+    background-color: lightgrey;
+    padding: 15px;
+}
