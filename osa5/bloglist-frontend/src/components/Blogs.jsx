@@ -1,14 +1,19 @@
 
 const Blogs = (props) => {
     console.log('blogs', props)
-    return  <p>{props.blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
-      )}
-      </p>
+    return (
+      <div>
+        <h3>bloglist</h3>
+        <p>{props.blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} />
+         )}
+        </p>
+      </div>
+    )
   }
 
   const Blog = ({ blog }) => {
-    return (<div>{blog.title} {blog.author} </div>  ) 
+    return (<div>{blog.title} by {blog.author} </div>  ) 
   }
 
   export default Blogs

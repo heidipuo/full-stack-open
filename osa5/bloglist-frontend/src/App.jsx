@@ -12,6 +12,11 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  //const [blog, setBlog] = useState(null)
+
 
   useEffect(() => {
     console.log('getting blogs...')
@@ -63,7 +68,8 @@ const handleLogout = (event) => {
 }
 
   const loginForm = () => (
-    <><h2>Log in to application</h2><form onSubmit={handleLogin}>
+    <><h2>Log in to application</h2>
+    <form onSubmit={handleLogin}>
       <div>
         username
         <input
@@ -84,13 +90,55 @@ const handleLogout = (event) => {
     </form></>      
   )
 
+  const addBlog = async (event) => {
+      event.preventDefault()
+      const newBlog = {
+        title: title,
+        author: author,
+        url: url
+      }
+
+      const returnedBlog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(returnedBlog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+  }
+
   const blogForm = () => (
-    <form >
-      <input
-      
+    <div>
+    <h2>Create a blog</h2>
+    <form onSubmit={addBlog}>
+     <ul> 
+      <li>
+        title
+        <input
+        type='text'
+        value={title}
+        name="Title"
+        onChange={({target}) => setTitle(target.value)}
       />
-      <button type="submit">save</button>
-    </form>  
+      </li>
+      <li>author
+      <input
+        type='text'
+        value={author}
+        name="Author"
+        onChange={({target}) => setAuthor(target.value)}
+      />
+      </li>
+      <li>url
+      <input
+        type='text'
+        value={url}
+        name="url"
+        onChange={({target}) => setUrl(target.value)}
+      />
+      </li>
+      </ul>
+      <button type="submit">create</button>
+    </form>
+     </div> 
   )
 
   const logoutForm = () => (
