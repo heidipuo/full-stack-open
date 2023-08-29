@@ -3,7 +3,7 @@ const Blogs = (props) => {
     console.log('blogs', props)
     return (
       <div>
-        <h3>bloglist</h3>
+        <h3>Bloglist</h3>
         <p>{props.blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
          )}

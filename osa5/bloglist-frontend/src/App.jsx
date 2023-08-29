@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react'
 import Blogs from './components/Blogs'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 
-
+ 
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  //const [blog, setBlog] = useState(null)
+  const [message, setMessage] = useState('')
+  const [notificationStyle, setNotificationStyle] = useState('')
 
 
   useEffect(() => {
@@ -32,7 +33,38 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
-  }, [])
+  }, []) 
+  
+  const addBlog = async (event) => {
+      event.preventDefault()
+      
+      try {
+      const newBlog = {
+        title: title,
+        author: author,
+        url: url
+      }
+
+      const returnedBlog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(returnedBlog))
+      setMessage(`You added a new blog: ${returnedBlog.title} by ${returnedBlog.author}`)
+      setNotificationStyle('success')
+      setEmptyMessage()
+    }catch (exception) {
+      console.log('errpr', exception.response)
+      if (exception.response.status === 400) {
+      setMessage('Could not add a message. blog title and url are required.')
+      setNotificationStyle('error')
+      setTimeout(() => {
+        setMessage('')
+      }, 9000)
+      }
+    }
+    
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -48,14 +80,18 @@ const App = () => {
       ) 
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setMessage('wrong username or password')
+      setNotificationStyle('error')
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage('')
       }, 5000)
+      
     }
+    setUsername('')
+    setPassword('')
+
+    
   }
 
 const handleLogout = (event) => {
@@ -90,20 +126,7 @@ const handleLogout = (event) => {
     </form></>      
   )
 
-  const addBlog = async (event) => {
-      event.preventDefault()
-      const newBlog = {
-        title: title,
-        author: author,
-        url: url
-      }
-
-      const returnedBlog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(returnedBlog))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-  }
+ 
 
   const blogForm = () => (
     <div>
@@ -140,20 +163,28 @@ const handleLogout = (event) => {
     </form>
      </div> 
   )
-
-  const logoutForm = () => (
+  const LogoutForm = () => (
     <form onSubmit={handleLogout}>
     <button type="submit">logout</button>
     </form>
   )
+ 
+
+  const setEmptyMessage = () => {
+    setTimeout(() => {
+      setMessage('')
+    }, 2000)
+  }
 
   return (
     <div>
 
+    <Notification message={message} style={notificationStyle}/>
+
     {!user && loginForm()}
     {user && <div>
         <h2>blogs</h2>
-        <p>{user.name} logged in {logoutForm()}</p>
+        <p>{user.name} logged in {LogoutForm()}</p>
          {blogForm()}
         <Blogs blogs={blogs} />
       </div>}
