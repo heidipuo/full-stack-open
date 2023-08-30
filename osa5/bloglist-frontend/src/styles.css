@@ -3,6 +3,16 @@ ul {
     padding: 2px;
 }
 
+p {
+
+    margin: 3px;
+}
+
+button {
+    margin-left: 5px;
+    margin-top: 2px
+}
+
 .success {
     color: green;
     background-color: lightgreen;
@@ -25,5 +35,14 @@ ul {
 
 .addBlog {
     background-color: lightgrey;
-    padding: 15px;
+    padding: 10px;
+}
+
+.blog {
+    background-color: beige;
+    padding: 7px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 1px;
+    margin-top: 5px;
 }
