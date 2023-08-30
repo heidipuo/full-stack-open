@@ -1,11 +1,11 @@
 const LoginForm = ({
-    handleLogin,
-    handleUsernameChange,
-    handlePasswordChange,
-    username, 
-    password
+  handleLogin,
+  handleUsernameChange,
+  handlePasswordChange,
+  username,
+  password
 }) => (
-    <div>
+  <div>
     <h2>Log in to application</h2>
     <form onSubmit={handleLogin}>
       <div>
@@ -26,7 +26,7 @@ const LoginForm = ({
       </div>
       <button type="submit">login</button>
     </form>
-    </div>      
-  )
+  </div>
+)
 
-  export default LoginForm
+export default LoginForm

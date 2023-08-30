@@ -1,11 +1,11 @@
 const Notification = (props) => {
-    if (props.message === '') {
-      return null
-    }
-  
-    return (
-        <div className={props.style}> {props.message}</div>
-    )
+  if (props.message === '') {
+    return null
   }
 
-  export default Notification
+  return (
+    <div className={props.style}> {props.message}</div>
+  )
+}
+
+export default Notification

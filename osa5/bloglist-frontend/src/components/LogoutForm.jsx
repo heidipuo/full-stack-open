@@ -1,8 +1,8 @@
 
-const LogoutForm = ({handleLogout}) => (
-    <form onSubmit={handleLogout}>
+const LogoutForm = ({ handleLogout }) => (
+  <form onSubmit={handleLogout}>
     <button type="submit">logout</button>
-    </form>
-  )
+  </form>
+)
 
-  export default LogoutForm
+export default LogoutForm
