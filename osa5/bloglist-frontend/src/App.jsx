@@ -37,11 +37,9 @@ const App = () => {
   }, [])
 
   const addBlog = async (blogObject) => {
-    console.log('blogi',blogObject)
     try {
       blogFormRef.current.toggleVisibility()
       const returnedBlog = await blogService.create(blogObject)
-      console.log('palautus', returnedBlog)
       setBlogs(blogs.concat(returnedBlog))
       setMessage(`You added a new blog: ${returnedBlog.title} by ${returnedBlog.author}`)
       setNotificationStyle('success')
@@ -119,7 +117,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification message={message} style={notificationStyle}/>
-      <p style={{marginBottom: 20}}>{user.name} logged in <LogoutForm handleLogout={handleLogout}/></p>
+      <p style={{ marginBottom: 20 }}>{user.name} logged in <LogoutForm handleLogout={handleLogout}/></p>
       <Togglable buttonLabel='Add blog' ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
