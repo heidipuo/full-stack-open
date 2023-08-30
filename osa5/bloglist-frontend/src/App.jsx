@@ -15,12 +15,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [message, setMessage] = useState('')
   const [notificationStyle, setNotificationStyle] = useState('')
-  const [addBlogVisible, setAddBlogVisible] = useState(false)
+
 
 
   useEffect(() => {
@@ -39,17 +36,11 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = async (event) => {
-    event.preventDefault()
+  const addBlog = async (blogObject) => {
 
     try {
-      const newBlog = {
-        title: title,
-        author: author,
-        url: url
-      }
 
-      const returnedBlog = await blogService.create(newBlog)
+      const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
       setMessage(`You added a new blog: ${returnedBlog.title} by ${returnedBlog.author}`)
       setNotificationStyle('success')
@@ -57,7 +48,7 @@ const App = () => {
     }catch (exception) {
       console.log('error', exception.response)
       if (exception.response.status === 400) {
-        setMessage('Could not add a message. Blog title and url are required.')
+        setMessage('Could not add a new blog. Blog title and url are required.')
         setNotificationStyle('error')
         setTimeout(() => {
           setMessage('')
@@ -65,9 +56,6 @@ const App = () => {
       }
     }
 
-    setTitle('')
-    setAuthor('')
-    setUrl('')
   }
 
   const handleLogin = async (event) => {
@@ -130,14 +118,7 @@ const App = () => {
       <Notification message={message} style={notificationStyle}/>
       <p>{user.name} logged in <LogoutForm handleLogout={handleLogout}/></p>
       <Togglable buttonLabel='Add blog'>
-        <BlogForm addBlog={addBlog}
-          title={title}
-          author={author}
-          url={url}
-          handleTitleChange={({ target }) => setTitle(target.value)}
-          handleAuthorChange={({ target }) => setAuthor(target.value)}
-          handleUrlChange={({ target }) => setUrl(target.value)}
-        />
+        <BlogForm createBlog={addBlog}/>
       </Togglable>
       <Blogs blogs={blogs} />
     </div>
