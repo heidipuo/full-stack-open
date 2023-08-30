@@ -3,7 +3,6 @@ import Blog from './components/Blog'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
-import LogoutForm from './components/LogoutForm'
 import Togglable from './components/Toggable'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -91,6 +90,12 @@ const App = () => {
     setUser(null)
   }
 
+  const deleteBlog = async (blogToDelete) => {
+    await blogService.deleteBlog(blogToDelete.id)
+    const updatedBlogs = blogs.filter(blog => blog.id !== blogToDelete.id)
+    setBlogs(updatedBlogs)
+  }
+
   const setEmptyMessage = () => {
     setTimeout(() => {
       setMessage('')
@@ -100,9 +105,7 @@ const App = () => {
   const blogFormRef = useRef()
 
   const handleLikeChange = (blogObject) => {
-    console.log('handlerissa', blogObject)
     const updatedBlogs = blogs.map(blog => blog.id === blogObject.id ? blogObject : blog)
-    console.log(updatedBlogs)
     setBlogs(updatedBlogs)
   }
 
@@ -123,14 +126,14 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification message={message} style={notificationStyle}/>
-      <p style={{ marginBottom: 20 }}>{user.name} logged in <LogoutForm handleLogout={handleLogout}/></p>
+      <p style={{ marginBottom: 20 }}>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       <Togglable buttonLabel='Add blog' ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
       <div>
         <h3>Bloglist</h3>
         <p>{blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} handleLikeChange={handleLikeChange}/>
+          <Blog key={blog.id} blog={blog} handleLikeChange={handleLikeChange} deleteBlog={deleteBlog}/>
         )}
         </p>
       </div>
