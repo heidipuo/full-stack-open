@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import Blogs from './components/Blogs'
+import Blog from './components/Blog'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -22,9 +22,9 @@ const App = () => {
 
   useEffect(() => {
     console.log('getting blogs...')
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
+    blogService.getAll().then(blogs => {
+      setBlogs(blogs)
+    })
   }, [])
 
   useEffect(() => {
@@ -99,6 +99,12 @@ const App = () => {
 
   const blogFormRef = useRef()
 
+  const handleLikeChange = (blogObject) => {
+    console.log('handlerissa', blogObject)
+    const updatedBlogs = blogs.map(blog => blog.id === blogObject.id ? blogObject : blog)
+    console.log(updatedBlogs)
+    setBlogs(updatedBlogs)
+  }
 
   if (user === null) {
     return (
@@ -121,7 +127,13 @@ const App = () => {
       <Togglable buttonLabel='Add blog' ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
-      <Blogs blogs={blogs} />
+      <div>
+        <h3>Bloglist</h3>
+        <p>{blogs.sort((a, b) => b.likes - a.likes).map(blog =>
+          <Blog key={blog.id} blog={blog} handleLikeChange={handleLikeChange}/>
+        )}
+        </p>
+      </div>
     </div>
   )
 }
