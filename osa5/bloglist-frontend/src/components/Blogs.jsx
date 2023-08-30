@@ -1,5 +1,6 @@
 import Blog from './Blog'
 
+
 const Blogs = ({ blogs }) => {
   console.log('blogs', blogs)
   return (
