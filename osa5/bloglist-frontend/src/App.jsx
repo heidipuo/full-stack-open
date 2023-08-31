@@ -109,6 +109,7 @@ const App = () => {
     setBlogs(updatedBlogs)
   }
 
+
   if (user === null) {
     return (
       <div>
@@ -141,7 +142,8 @@ const App = () => {
               key={blog.id}
               blog={blog} handleLikeChange={handleLikeChange}
               deleteBlog={deleteBlog}
-              username={user.username}/>
+              username={user.username}
+            />
           )}
         </ul>
       </div>

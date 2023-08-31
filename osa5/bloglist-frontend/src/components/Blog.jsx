@@ -28,6 +28,7 @@ const Blog = ({ blog, handleLikeChange, deleteBlog, username }) => {
     deleteBlog(blog)
   }
 
+  //
   return (
 
     <div className='blog'>
@@ -42,6 +43,7 @@ const Blog = ({ blog, handleLikeChange, deleteBlog, username }) => {
         <p>{likes} <button onClick={addALike}>like</button></p>
         <p>{blog.user.username}</p>
         {username === blog.user.username && <button className='removeButton' onClick={setBlogToDelete}>remove</button>}
+
       </div>
 
     </div>
