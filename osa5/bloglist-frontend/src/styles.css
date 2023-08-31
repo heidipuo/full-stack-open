@@ -46,3 +46,10 @@ button {
     border-width: 1px;
     margin-top: 5px;
 }
+
+.removeButton {
+    background-color: rgb(16, 83, 124);
+    color: aliceblue;
+    border-radius: 6px;
+    padding: 3px;
+}

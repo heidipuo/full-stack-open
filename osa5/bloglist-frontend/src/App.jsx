@@ -125,18 +125,27 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+
       <Notification message={message} style={notificationStyle}/>
+
       <p style={{ marginBottom: 20 }}>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       <Togglable buttonLabel='Add blog' ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
+
       <div>
         <h3>Bloglist</h3>
-        <p>{blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} handleLikeChange={handleLikeChange} deleteBlog={deleteBlog}/>
-        )}
-        </p>
+        <ul>
+          {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
+            <Blog
+              key={blog.id}
+              blog={blog} handleLikeChange={handleLikeChange}
+              deleteBlog={deleteBlog}
+              username={user.username}/>
+          )}
+        </ul>
       </div>
+
     </div>
   )
 }
