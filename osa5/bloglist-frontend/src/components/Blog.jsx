@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
 
 const Blog = ({ blog, handleLikeChange, deleteBlog, username }) => {
   const [likes, setLikes] = useState(blog.likes)
@@ -19,9 +18,8 @@ const Blog = ({ blog, handleLikeChange, deleteBlog, username }) => {
       url: blog.url,
       likes: likes + 1
     }
-    const blogUpdate = await blogService.update(blog.id, updatedBlog )
+    handleLikeChange(updatedBlog, blog.id)
     setLikes(likes + 1)
-    handleLikeChange(blogUpdate)
   }
 
   const setBlogToDelete = () => {

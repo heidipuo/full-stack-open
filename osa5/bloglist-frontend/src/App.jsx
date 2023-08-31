@@ -104,8 +104,10 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const handleLikeChange = (blogObject) => {
-    const updatedBlogs = blogs.map(blog => blog.id === blogObject.id ? blogObject : blog)
+  const handleLikeChange = async (blogObject, id) => {
+
+    const upDatedBlog = await blogService.update(id, blogObject )
+    const updatedBlogs = blogs.map(blog => blog.id === upDatedBlog.id ? upDatedBlog : blog)
     setBlogs(updatedBlogs)
   }
 

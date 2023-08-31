@@ -26,15 +26,33 @@ test('url, likes and user are displayed when the view button is clicked', async 
 
   const  { container } = render(<Blog blog={blog} />)
   const blogInfoDiv = container.querySelector('.blogInfo')
-  
-  const user = userEvent.setup() 
+
+  const user = userEvent.setup()
   const button = screen.getByText('view')
   await user.click(button)
-  
-  expect(blogInfoDiv).not.toHaveStyle({display: 'none'})
+
+  expect(blogInfoDiv).not.toHaveStyle({ display: 'none' })
   expect(blogInfoDiv).toHaveTextContent('http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll')
   expect(blogInfoDiv).toHaveTextContent('51')
   expect(blogInfoDiv).toHaveTextContent('Heidi')
+
+})
+
+test('like button is clicked twice', async () => {
+
+  const mockHandler = jest.fn()
+
+  render(<Blog blog={blog} handleLikeChange={mockHandler}/>)
+
+  const user = userEvent.setup()
+  const viewButton = screen.getByText('view')
+  await user.click(viewButton)
+
+  const likeButton = screen.getByText('like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
 
 })
 
