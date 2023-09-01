@@ -57,9 +57,9 @@ describe('Blog ', function() {
   })
   describe('when logged in', function() {
     beforeEach(function() {
-     cy.login({username: 'test user', password: 'secret'})
+      cy.login({ username: 'test user', password: 'secret' })
     })
-  
+
     it('a new blog can be created', function() {
       cy.contains('Add blog').click()
       cy.get('.title').type('a new blog')
@@ -68,8 +68,8 @@ describe('Blog ', function() {
       cy.contains('create').click()
 
       cy.get('.success')
-      .should('contain', 'You added a new blog: a new blog by blogger')
-      .and('have.css', 'color', 'rgb(0, 128, 0)')
+        .should('contain', 'You added a new blog: a new blog by blogger')
+        .and('have.css', 'color', 'rgb(0, 128, 0)')
       cy.contains('a new blog - blogger')
     })
 
@@ -85,13 +85,13 @@ describe('Blog ', function() {
       it.only('a blog can be liked', function() {
         cy.contains('view').click()
         cy.contains('like').click()
-        
+
         cy. get('.blogInfo')
           .should('contain', 1)
           .and('not.contain', 0)
-        
+
       })
+    })
   })
-})
 
 })
