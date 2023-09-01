@@ -113,48 +113,48 @@ describe('Blog ', function() {
         cy.get('#username').type('another test user')
         cy.get('#password').type('topsecret')
         cy.get('#login-button').click()
-        
+
         cy.contains('view').click()
         cy.contains('remove').should('not.exist')
 
       })
 
-      it.only('the blogs are shown in order according to the amount of likes', function() {
+      it('the blogs are shown in order according to the amount of likes', function() {
         cy.createBlog({
           title: 'More popular blog post',
           author: 'Blogger Star',
-          url: 'www.bestblog.com', 
+          url: 'www.bestblog.com',
           likes: 3
         })
 
         cy.createBlog({
           title:  'The most popular blog post',
           author: 'John Blogston',
-          url: 'www.blog.com', 
+          url: 'www.blog.com',
           likes: 5
         })
 
         cy.get('.blog').eq(0).should('contain', 'The most popular blog post')
         cy.get('.blog').eq(1).should('contain', 'More popular blog post')
         cy.get('.blog').eq(2).should('contain', 'Blog post')
-        
+
         cy.get('.blog')
           .eq(1)
           .contains('view')
           .click()
-        
-          cy.get('.blog')
+
+        cy.get('.blog')
           .eq(1)
           .contains('like')
           .click()
           .click()
           .click()
 
-          cy.get('.blog').eq(0).should('contain', 'More popular blog')
-          cy.get('.blog').eq(1).should('contain', 'The most popular blog post')
+        cy.get('.blog').eq(0).should('contain', 'More popular blog')
+        cy.get('.blog').eq(1).should('contain', 'The most popular blog post')
 
-        
-      
+
+
 
       })
     })
