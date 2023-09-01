@@ -22,7 +22,7 @@ const LoginForm = ({
       <div>
         password
         <input
-        id='password'
+          id='password'
           type="password"
           value={password}
           name="Password"

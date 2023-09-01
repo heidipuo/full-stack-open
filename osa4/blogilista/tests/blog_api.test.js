@@ -149,7 +149,7 @@ describe('when there is initially some blogs saved', () => {
 
     test('error 400 is given if there`s no title field', async () => {
       const token = await helper.getToken()
-     
+
       const newBlog = {
         author: 'John No-Title',
         url : 'http://www.u.arizona.edu/~rubinson/copyright_violations/-.html',
@@ -170,7 +170,7 @@ describe('when there is initially some blogs saved', () => {
 
     test('error 400 is given if there`s no url field', async () => {
       const token = await helper.getToken()
-      
+
       const newBlog = {
         title: 'No url here',
         author: 'John Johnson',
@@ -191,7 +191,7 @@ describe('when there is initially some blogs saved', () => {
     test('error 401 is given if blog is added unauthorized', async () => {
       const users = await helper.usersInDb()
       const userId = users.find(user => user.username === 'root').id
-      
+
       const newBlog = {
         title: 'We can code',
         author: 'Edsger W. Dijkstra',
@@ -230,7 +230,7 @@ describe('when there is initially some blogs saved', () => {
   describe('updating a blog', () => {
     test('succeeds with status code 200', async () => {
       const token = await helper.getToken()
-      
+
       const blogsAtStart = await helper.blogsInDb()
       const blogToUpdate = blogsAtStart[0]
 
