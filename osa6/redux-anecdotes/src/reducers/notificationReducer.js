@@ -14,7 +14,6 @@ const notificationSlice = createSlice({
             const anecdote = action.payload
             return `You voted for anecdote "${anecdote}"`
         }
-    
     }
 })
 
