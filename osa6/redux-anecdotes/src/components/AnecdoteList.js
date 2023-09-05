@@ -18,11 +18,11 @@ const Anecdote = ({anecdote, handleClick}) => {
 const Anecdotes = () => {
   
     const anecdotes = useSelector(state => {
-
-       if (state.filter === 'ALL') {
+      if (state.filter === 'ALL') {
         return state.anecdotes
       }else {
-        return state.anecdotes.filter(anec => anec.content.toLowerCase().includes(state.filter))
+        return state.anecdotes.filter(anec => {
+          return anec.content.toLowerCase().includes(state.filter)})
       }
     })
     
@@ -37,10 +37,9 @@ const Anecdotes = () => {
     return (
     <div>
  
-    
-    {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
+    {[...anecdotes].sort((a, b) => b.votes - a.votes).map(anecdote =>
         <Anecdote 
-            key={anecdote.id}
+            key={anecdote.id} 
             anecdote={anecdote}
             handleClick={() => vote(anecdote.id)}
 
