@@ -7,6 +7,7 @@ const anecdotesAtStart = [
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
 
+
 const getId = () => (100000 * Math.random()).toFixed(0)
 
 const asObject = (anecdote) => {
@@ -14,11 +15,13 @@ const asObject = (anecdote) => {
     content: anecdote,
     id: getId(),
     votes: 0,
-    filter: 'SHOW'
-  }
+    show: true
+    }
 }
 
 const initialState = anecdotesAtStart.map(asObject)
+  
+
 
 const anecdoteReducer = (state = initialState, action) => {
   console.log('state now: ', state)
@@ -33,21 +36,10 @@ const anecdoteReducer = (state = initialState, action) => {
       return state.map(anec => anec.id !== anecToVote.id ? anec : updatedAnec)
     case 'ADD_NEW':
       return [...state, action.payload]
-    case 'SET_FILTER':
-        const filter = action.payload
-        const filtered = state.map(anec => 
-          anec.content.toLowerCase().includes(filter) 
-            ? anec = {...anec, filter: 'SHOW'} 
-            : anec = {...anec, filter: 'HIDE'}
-          )
-        console.log(filtered)
-      return filtered
     default:
       return state
   }
 }
-
-
 
 export const voteFor = (id) => {
   console.log('vote', id)
@@ -65,11 +57,5 @@ export const createAnecdote = (anecdote) => {
 }
 }
 
-export const handleFilter = (filter) => {
-  return {
-   type:'SET_FILTER',
-   payload: filter
-  }
-}
 
 export default anecdoteReducer
