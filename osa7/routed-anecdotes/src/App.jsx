@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
-  BrowserRouter as Router,
-  Routes, Route, Link, useParams
+  Routes, Route, Link, 
+  useNavigate, useMatch
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -17,10 +17,7 @@ const Menu = () => {
   )
 }
 
-const Anecdote = ({ anecdotes }) => {
-  const id = useParams().id
-  const anecdote = anecdotes.find(anec => anec.id === Number(id))
-  return (
+const Anecdote = ({ anecdote }) =>  (
     <div>
       <h2>{anecdote.content} by {anecdote.author}</h2>
       <div>has {anecdote.votes} votes</div>
@@ -28,7 +25,7 @@ const Anecdote = ({ anecdotes }) => {
        
     </div>
   )
-}
+
 
 const AnecdoteList = ({ anecdotes }) => (
  
@@ -57,6 +54,14 @@ const About = () => (
   </div>
 )
 
+const Notification = (props) => {
+  return (
+    <div>
+      {props.notification}
+    </div>
+  )
+}
+
 const Footer = () => (
   <div>
     Anecdote app for <a href='https://fullstackopen.com/'>Full Stack Open</a>.
@@ -70,6 +75,7 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -79,6 +85,11 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    navigate('/anecdotes')
+    props.setNotification(`A new anecdote "${content}" created`)
+    setTimeout(() => {
+      props.setNotification('')
+    }, 5000)
   }
 
   return (
@@ -123,6 +134,12 @@ const App = () => {
   ])
 
   const [notification, setNotification] = useState('')
+  
+  const match = useMatch('/anecdotes/:id')
+  const anecdote = match
+    ? anecdotes.find(anec => anec.id === Number(match.params.id))
+    : null
+
 
   const padding = {
     paddingRight: 5
@@ -148,27 +165,29 @@ const App = () => {
   }
  
   return (
-   <Router>
-      
-       <h1>Software anecdotes</h1>
+   
+    <div>
+      <h1>Software anecdotes</h1>
       <div>
         <Link style={padding} to="/anecdotes">anecdotes</Link>
         <Link style={padding} to="/createnew">create new</Link>
         <Link style={padding} to="/about">about</Link>
       </div>
+
+      <Notification notification={notification}/>
       
       <Routes>
-        <Route path='/anecdotes/:id' element={<Anecdote anecdotes={anecdotes} />} />
+        <Route path='/anecdotes/:id' element={<Anecdote anecdote={anecdote} />} />
         <Route path='/anecdotes' element={<AnecdoteList anecdotes={anecdotes}/> } />
         <Route path='/about' element={<About />}/>
-        <Route path='/createnew' element={<CreateNew addNew={addNew}/>}/>
+        <Route path='/createnew' element={<CreateNew addNew={addNew} setNotification={setNotification}/>}/>
       </Routes>
 
       <div className='footer' >
         <Footer />
       </div>
-
-   </Router>
+    </div>
+   
   )
 }
 
