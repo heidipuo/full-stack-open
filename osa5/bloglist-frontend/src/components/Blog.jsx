@@ -23,10 +23,11 @@ const Blog = ({ blog, handleLikeChange, deleteBlog, username }) => {
   }
 
   const setBlogToDelete = () => {
-    deleteBlog(blog)
+    if (window.confirm(`Do you want to delete "${blog.title}?" by ${blog.author}`)){
+      deleteBlog(blog)
+    }
   }
 
-  //
   return (
 
     <div className='blog'>
