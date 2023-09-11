@@ -7,9 +7,17 @@ export const useField = (type) => {
     setValue(event.target.value)
   }
 
+  const onReset = () => {
+    console.log('value', value)
+    setValue('')
+  }
+
   return {
-    type,
-    value,
-    onChange
+    inputs: { 
+      type,
+      value,
+      onChange
+    }, 
+    onReset
   }
 }
