@@ -8,6 +8,8 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import { useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import BlogList from './components/BlogList'
+import { initialBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -19,9 +21,7 @@ const App = () => {
 
   useEffect(() => {
     console.log('getting blogs...')
-    blogService.getAll().then((blogs) => {
-      setBlogs(blogs)
-    })
+    dispatch(initialBlogs())
   }, [])
 
   useEffect(() => {
@@ -85,21 +85,7 @@ const App = () => {
     setUser(null)
   }
 
-  const deleteBlog = async (blogToDelete) => {
-    await blogService.deleteBlog(blogToDelete.id)
-    const updatedBlogs = blogs.filter((blog) => blog.id !== blogToDelete.id)
-    setBlogs(updatedBlogs)
-  }
-
   const blogFormRef = useRef()
-
-  const handleLikeChange = async (blogObject, id) => {
-    const upDatedBlog = await blogService.update(id, blogObject)
-    const updatedBlogs = blogs.map((blog) =>
-      blog.id === upDatedBlog.id ? upDatedBlog : blog
-    )
-    setBlogs(updatedBlogs)
-  }
 
   if (user === null) {
     return (
@@ -131,19 +117,7 @@ const App = () => {
 
       <div>
         <h3>Bloglist</h3>
-        <ul>
-          {blogs
-            .sort((a, b) => b.likes - a.likes)
-            .map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                handleLikeChange={handleLikeChange}
-                deleteBlog={deleteBlog}
-                username={user.username}
-              />
-            ))}
-        </ul>
+        <BlogList user={user} />
       </div>
     </div>
   )

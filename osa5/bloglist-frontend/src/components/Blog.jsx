@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { deleteBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, handleLikeChange, deleteBlog, username }) => {
+const Blog = ({ blog, handleLikeChange, username }) => {
   const [likes, setLikes] = useState(blog.likes)
   const [blogInfoVisible, setBlogInfoVisible] = useState(false)
 
@@ -26,7 +27,8 @@ const Blog = ({ blog, handleLikeChange, deleteBlog, username }) => {
     if (
       window.confirm(`Do you want to delete "${blog.title}?" by ${blog.author}`)
     ) {
-      deleteBlog(blog)
+      console.log('blog comp', blog.id)
+      deleteBlog(blog.id)
     }
   }
 
