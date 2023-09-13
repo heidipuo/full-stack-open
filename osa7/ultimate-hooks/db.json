@@ -1,0 +1,43 @@
+{
+  "notes": [
+    {
+      "content": "Custome hooks are great!",
+      "id": 1
+    },
+    {
+      "content": "This is a awesome course!",
+      "id": 2
+    },
+    {
+      "content": "Coding is fun",
+      "id": 3
+    }
+  ],
+  "persons": [
+    {
+      "name": "Mikko",
+      "number": "040-1234567",
+      "id": 1
+    },
+    {
+      "name": "Matti",
+      "number": "040588989",
+      "id": 2
+    },
+    {
+      "name": "Liisa",
+      "number": "64564365345",
+      "id": 3
+    },
+    {
+      "name": "Onneli",
+      "number": "040 8889987",
+      "id": 4
+    },
+    {
+      "name": "Timo",
+      "number": "789709709",
+      "id": 5
+    }
+  ]
+}
