@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 
 const BlogForm = ({ createBlog }) => {
@@ -11,7 +10,7 @@ const BlogForm = ({ createBlog }) => {
     createBlog({
       title: title,
       author: author,
-      url: url
+      url: url,
     })
 
     setTitle('')
@@ -25,31 +24,33 @@ const BlogForm = ({ createBlog }) => {
       <form onSubmit={addBlog}>
         <ul>
           <li>
-        title
+            title
             <input
-              className='title'
-              type='text'
+              className="title"
+              type="text"
               value={title}
               name="Title"
-              onChange={event => setTitle(event.target.value)}
+              onChange={(event) => setTitle(event.target.value)}
             />
           </li>
-          <li>author
+          <li>
+            author
             <input
-              className='author'
-              type='text'
+              className="author"
+              type="text"
               value={author}
               name="Author"
-              onChange={event => setAuthor(event.target.value)}
+              onChange={(event) => setAuthor(event.target.value)}
             />
           </li>
-          <li>url
+          <li>
+            url
             <input
-              className='url'
-              type='text'
+              className="url"
+              type="text"
               value={url}
               name="url"
-              onChange={event => setUrl(event.target.value)}
+              onChange={(event) => setUrl(event.target.value)}
             />
           </li>
         </ul>

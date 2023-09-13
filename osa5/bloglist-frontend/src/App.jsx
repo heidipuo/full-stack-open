@@ -6,22 +6,20 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Toggable'
 import blogService from './services/blogs'
 import loginService from './services/login'
-
-
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState('')
-  const [notificationStyle, setNotificationStyle] = useState('')
 
-
+  const dispatch = useDispatch()
 
   useEffect(() => {
     console.log('getting blogs...')
-    blogService.getAll().then(blogs => {
+    blogService.getAll().then((blogs) => {
       setBlogs(blogs)
     })
   }, [])
@@ -40,20 +38,23 @@ const App = () => {
       blogFormRef.current.toggleVisibility()
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
-      setMessage(`You added a new blog: ${returnedBlog.title} by ${returnedBlog.author}`)
-      setNotificationStyle('success')
-      setEmptyMessage()
-    }catch (exception) {
+      dispatch(
+        setNotification(
+          `You added a new blog: ${returnedBlog.title} by ${returnedBlog.author}`,
+          5
+        )
+      )
+    } catch (exception) {
       console.log('error', exception.response)
       if (exception.response.status === 400) {
-        setMessage('Could not add a new blog. Blog title and url are required.')
-        setNotificationStyle('error')
-        setTimeout(() => {
-          setMessage('')
-        }, 9000)
+        dispatch(
+          setNotification(
+            'Could not add a new blog. Blog title and url are required.',
+            9
+          )
+        )
       }
     }
-
   }
 
   const handleLogin = async (event) => {
@@ -62,21 +63,15 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username, password,
+        username,
+        password,
       })
 
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
     } catch (exception) {
-      setMessage('wrong username or password')
-      setNotificationStyle('error')
-      setTimeout(() => {
-        setMessage('')
-      }, 5000)
-
+      dispatch(setNotification('wrong username or password', 5))
     }
     setUsername('')
     setPassword('')
@@ -92,64 +87,64 @@ const App = () => {
 
   const deleteBlog = async (blogToDelete) => {
     await blogService.deleteBlog(blogToDelete.id)
-    const updatedBlogs = blogs.filter(blog => blog.id !== blogToDelete.id)
+    const updatedBlogs = blogs.filter((blog) => blog.id !== blogToDelete.id)
     setBlogs(updatedBlogs)
-  }
-
-  const setEmptyMessage = () => {
-    setTimeout(() => {
-      setMessage('')
-    }, 2000)
   }
 
   const blogFormRef = useRef()
 
   const handleLikeChange = async (blogObject, id) => {
-
-    const upDatedBlog = await blogService.update(id, blogObject )
-    const updatedBlogs = blogs.map(blog => blog.id === upDatedBlog.id ? upDatedBlog : blog)
+    const upDatedBlog = await blogService.update(id, blogObject)
+    const updatedBlogs = blogs.map((blog) =>
+      blog.id === upDatedBlog.id ? upDatedBlog : blog
+    )
     setBlogs(updatedBlogs)
   }
-
 
   if (user === null) {
     return (
       <div>
-        <Notification message={message} style={notificationStyle}/>
-        <LoginForm username={username}
+        <Notification />
+        <LoginForm
+          username={username}
           password={password}
           handleUsernameChange={({ target }) => setUsername(target.value)}
           handlePasswordChange={({ target }) => setPassword(target.value)}
-          handleLogin={handleLogin}/>
+          handleLogin={handleLogin}
+        />
       </div>
     )
   }
 
   return (
-    <div>
+    <div className="container">
       <h2>blogs</h2>
 
-      <Notification message={message} style={notificationStyle}/>
+      <Notification />
 
-      <p style={{ marginBottom: 20 }}>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-      <Togglable buttonLabel='Add blog' ref={blogFormRef}>
+      <p style={{ marginBottom: 20 }}>
+        {user.name} logged in <button onClick={handleLogout}>logout</button>
+      </p>
+      <Togglable buttonLabel="Add blog" ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
 
       <div>
         <h3>Bloglist</h3>
         <ul>
-          {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-            <Blog
-              key={blog.id}
-              blog={blog} handleLikeChange={handleLikeChange}
-              deleteBlog={deleteBlog}
-              username={user.username}
-            />
-          )}
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                handleLikeChange={handleLikeChange}
+                deleteBlog={deleteBlog}
+                username={user.username}
+              />
+            ))}
         </ul>
       </div>
-
     </div>
   )
 }

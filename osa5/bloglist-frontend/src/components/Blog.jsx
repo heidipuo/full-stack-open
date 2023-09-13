@@ -16,37 +16,44 @@ const Blog = ({ blog, handleLikeChange, deleteBlog, username }) => {
       title: blog.title,
       author: blog.author,
       url: blog.url,
-      likes: likes + 1
+      likes: likes + 1,
     }
     handleLikeChange(updatedBlog, blog.id)
     setLikes(likes + 1)
   }
 
   const setBlogToDelete = () => {
-    if (window.confirm(`Do you want to delete "${blog.title}?" by ${blog.author}`)){
+    if (
+      window.confirm(`Do you want to delete "${blog.title}?" by ${blog.author}`)
+    ) {
       deleteBlog(blog)
     }
   }
 
   return (
-
-    <div className='blog'>
-
-      <div style={hideWhenVisible}>{blog.title} - {blog.author}
+    <div className="blog">
+      <div style={hideWhenVisible}>
+        {blog.title} - {blog.author}
         <button onClick={toggleVisibility}>view</button>
       </div>
 
-      <div className='blogInfo' style={showWhenVisible}>
-        <p>{blog.title} - {blog.author} <button onClick={toggleVisibility}>hide</button> </p>
+      <div className="blogInfo" style={showWhenVisible}>
+        <p>
+          {blog.title} - {blog.author}{' '}
+          <button onClick={toggleVisibility}>hide</button>{' '}
+        </p>
         <p>{blog.url}</p>
-        <p>{likes} <button onClick={addALike}>like</button></p>
+        <p>
+          {likes} <button onClick={addALike}>like</button>
+        </p>
         <p>{blog.user.username}</p>
-        {username === blog.user.username && <button className='removeButton' onClick={setBlogToDelete}>remove</button>}
-
+        {username === blog.user.username && (
+          <button className="removeButton" onClick={setBlogToDelete}>
+            remove
+          </button>
+        )}
       </div>
-
     </div>
-
   )
 }
 

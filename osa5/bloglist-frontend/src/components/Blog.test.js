@@ -6,26 +6,23 @@ import Blog from './Blog'
 import BlogForm from './BlogForm'
 
 const blog = {
-  title:	'Testipostaus',
-  author:	'Robert C. Martin',
-  url:	'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
-  likes:	51,
+  title: 'Testipostaus',
+  author: 'Robert C. Martin',
+  url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+  likes: 51,
   user: {
-    username: 'Heidi'
-  }
+    username: 'Heidi',
+  },
 }
 
 test('renders content', () => {
-
   render(<Blog blog={blog} />)
 
   const element = screen.getAllByText('Testipostaus', { exact: false })
-
 })
 
 test('url, likes and user are displayed when the view button is clicked', async () => {
-
-  const  { container } = render(<Blog blog={blog} />)
+  const { container } = render(<Blog blog={blog} />)
   const blogInfoDiv = container.querySelector('.blogInfo')
 
   const user = userEvent.setup()
@@ -33,17 +30,17 @@ test('url, likes and user are displayed when the view button is clicked', async 
   await user.click(button)
 
   expect(blogInfoDiv).not.toHaveStyle({ display: 'none' })
-  expect(blogInfoDiv).toHaveTextContent('http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll')
+  expect(blogInfoDiv).toHaveTextContent(
+    'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll'
+  )
   expect(blogInfoDiv).toHaveTextContent('51')
   expect(blogInfoDiv).toHaveTextContent('Heidi')
-
 })
 
 test('like button is clicked twice', async () => {
-
   const mockHandler = jest.fn()
 
-  render(<Blog blog={blog} handleLikeChange={mockHandler}/>)
+  render(<Blog blog={blog} handleLikeChange={mockHandler} />)
 
   const user = userEvent.setup()
   const viewButton = screen.getByText('view')
@@ -54,7 +51,6 @@ test('like button is clicked twice', async () => {
   await user.click(likeButton)
 
   expect(mockHandler.mock.calls).toHaveLength(2)
-
 })
 
 test('<BlogForm /> updates parent state and calls onSubmit', async () => {
@@ -77,6 +73,4 @@ test('<BlogForm /> updates parent state and calls onSubmit', async () => {
   expect(createBlog.mock.calls[0][0].title).toBe('test title')
   expect(createBlog.mock.calls[0][0].author).toBe('test author')
   expect(createBlog.mock.calls[0][0].url).toBe('test url')
-
 })
-
