@@ -1,16 +1,15 @@
 import { useState } from 'react'
-import { deleteBlog } from '../reducers/blogReducer'
+import { deleteBlog, updateLikes } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, handleLikeChange, username }) => {
-  const [likes, setLikes] = useState(blog.likes)
+const Blog = ({ blog, username }) => {
   const [blogInfoVisible, setBlogInfoVisible] = useState(false)
 
   const hideWhenVisible = { display: blogInfoVisible ? 'none' : '' }
   const showWhenVisible = { display: blogInfoVisible ? '' : 'none' }
 
-  const dispatc = useDispatch()
-  
+  const dispatch = useDispatch()
+
   const toggleVisibility = () => {
     setBlogInfoVisible(!blogInfoVisible)
   }
@@ -20,18 +19,17 @@ const Blog = ({ blog, handleLikeChange, username }) => {
       title: blog.title,
       author: blog.author,
       url: blog.url,
-      likes: likes + 1,
+      likes: blog.likes + 1,
+      id: blog.id,
     }
-    handleLikeChange(updatedBlog, blog.id)
-    setLikes(likes + 1)
+    dispatch(updateLikes(updatedBlog))
   }
 
   const setBlogToDelete = () => {
     if (
       window.confirm(`Do you want to delete "${blog.title}?" by ${blog.author}`)
     ) {
-      console.log('blog comp', blog.id)
-      dispatc(deleteBlog(blog.id))
+      dispatch(deleteBlog(blog.id))
     }
   }
 
@@ -49,7 +47,7 @@ const Blog = ({ blog, handleLikeChange, username }) => {
         </p>
         <p>{blog.url}</p>
         <p>
-          {likes} <button onClick={addALike}>like</button>
+          {blog.likes} <button onClick={addALike}>like</button>
         </p>
         <p>{blog.user.username}</p>
         {username === blog.user.username && (

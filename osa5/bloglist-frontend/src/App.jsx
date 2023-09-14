@@ -12,7 +12,6 @@ import BlogList from './components/BlogList'
 import { initialBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -32,30 +31,6 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  const addBlog = async (blogObject) => {
-    try {
-      blogFormRef.current.toggleVisibility()
-      const returnedBlog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(returnedBlog))
-      dispatch(
-        setNotification(
-          `You added a new blog: ${returnedBlog.title} by ${returnedBlog.author}`,
-          5
-        )
-      )
-    } catch (exception) {
-      console.log('error', exception.response)
-      if (exception.response.status === 400) {
-        dispatch(
-          setNotification(
-            'Could not add a new blog. Blog title and url are required.',
-            9
-          )
-        )
-      }
-    }
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -112,7 +87,7 @@ const App = () => {
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
       <Togglable buttonLabel="Add blog" ref={blogFormRef}>
-        <BlogForm createBlog={addBlog} />
+        <BlogForm />
       </Togglable>
 
       <div>

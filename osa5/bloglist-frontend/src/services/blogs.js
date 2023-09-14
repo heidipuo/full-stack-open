@@ -27,7 +27,6 @@ const update = (id, newObject) => {
 }
 
 const deleteBlog = (id) => {
-  console.log('DETETE', id)
   const config = {
     headers: { Authorization: token },
   }
