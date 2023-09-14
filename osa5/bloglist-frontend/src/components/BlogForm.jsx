@@ -13,11 +13,13 @@ const BlogForm = () => {
   const addBlog = (event) => {
     event.preventDefault()
 
-    dispatch(createBlog({
-      title: title,
-      author: author,
-      url: url,
-    }))
+    dispatch(
+      createBlog({
+        title: title,
+        author: author,
+        url: url,
+      })
+    )
     dispatch(setNotification(`You added a new blog: ${title} by ${author}`, 5))
 
     setTitle('')
