@@ -6,6 +6,7 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Toggable'
 import BlogList from './components/BlogList'
+import Blog from './components/Blog'
 import UserInfo from './components/UserInfo'
 import { initialBlogs } from './reducers/blogReducer'
 import { handleLoggedInUser } from './reducers/loginReducer'
@@ -17,6 +18,9 @@ import {
   Route,
   useParams,
 } from 'react-router-dom'
+import { updateLikes } from './reducers/blogReducer'
+import { deleteBlog } from './reducers/blogReducer'
+import { deleteBlogFromUser } from './reducers/usersReducer'
 
 const BlogPage = () => {
   const blogFormRef = useRef()
@@ -59,7 +63,6 @@ const UsersPage = ({ users }) => {
 const User = ({ users }) => {
   const id = useParams().id
   const user = users.find((user) => user.id === id)
-  console.log('user in app', user)
 
   if (!user) {
     return null
@@ -77,6 +80,7 @@ const User = ({ users }) => {
     </div>
   )
 }
+
 
 const App = () => {
   const user = useSelector((state) => state.login)
@@ -118,6 +122,7 @@ const App = () => {
           <Route path="/" element={<BlogPage />} />
           <Route path="/users" element={<UsersPage users={users} />} />
           <Route path="/users/:id" element={<User users={users} />} />
+          <Route path="/blogs/:id" element={<Blog />}/>
         </Routes>
       </Router>
     </div>
