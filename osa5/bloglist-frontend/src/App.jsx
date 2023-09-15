@@ -99,25 +99,31 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div className="containen">
+      <div className="container">
         <Notification />
         <LoginForm />
       </div>
     )
   }
 
+  /*
+.navi li a {
+  display: block;
+  padding: 8px;
+  
+}
+*/
   return (
     <div className="container">
       <Router>
-        <div>
-          <Link to="/">home</Link>
-          <Link to="/users">users</Link>
-        </div>
-
+        <ul className='navi'>
+          <li><Link className='child' to="/">home</Link></li>
+          <li><Link className='child' to="/users">users</Link></li>
+          <li style={{float: 'right'}}><UserInfo className='child' /></li>
+        </ul>
+        
         <h2>Blogs</h2>
         <Notification />
-        <UserInfo />
-
         <Routes>
           <Route path="/" element={<BlogPage />} />
           <Route path="/users" element={<UsersPage users={users} />} />
