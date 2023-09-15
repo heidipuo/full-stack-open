@@ -1,26 +1,33 @@
 import { useState } from 'react'
 import { createBlog } from '../reducers/blogReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
+import { addBlogToUser } from '../reducers/usersReducer'
 
 const BlogForm = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  const loggedInUsername = useSelector((state) => state.login.username)
+  const user = useSelector((state) =>
+    state.users.find((user) => user.username === loggedInUsername)
+  )
+
   const dispatch = useDispatch()
 
   const addBlog = (event) => {
     event.preventDefault()
 
-    dispatch(
-      createBlog({
-        title: title,
-        author: author,
-        url: url,
-      })
-    )
+    const newBlog = {
+      title: title,
+      author: author,
+      url: url,
+    }
+
+    dispatch(createBlog(newBlog))
     dispatch(setNotification(`You added a new blog: ${title} by ${author}`, 5))
+    dispatch(addBlogToUser(newBlog, user))
 
     setTitle('')
     setAuthor('')

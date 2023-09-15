@@ -1,8 +1,14 @@
 import { useState } from 'react'
 import { deleteBlog, updateLikes } from '../reducers/blogReducer'
-import { useDispatch } from 'react-redux'
+import { deleteBlogFromUser } from '../reducers/usersReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
-const Blog = ({ blog, username }) => {
+const Blog = ({ blog }) => {
+  const loggedInUsername = useSelector((state) => state.login.username)
+  const user = useSelector((state) =>
+    state.users.find((user) => user.username === loggedInUsername)
+  )
+
   const [blogInfoVisible, setBlogInfoVisible] = useState(false)
 
   const hideWhenVisible = { display: blogInfoVisible ? 'none' : '' }
@@ -30,6 +36,7 @@ const Blog = ({ blog, username }) => {
       window.confirm(`Do you want to delete "${blog.title}?" by ${blog.author}`)
     ) {
       dispatch(deleteBlog(blog.id))
+      dispatch(deleteBlogFromUser(blog.id, user))
     }
   }
 
@@ -50,7 +57,7 @@ const Blog = ({ blog, username }) => {
           {blog.likes} <button onClick={addALike}>like</button>
         </p>
         <p>{blog.user.username}</p>
-        {username === blog.user.username && (
+        {loggedInUsername === blog.user.username && (
           <button className="removeButton" onClick={setBlogToDelete}>
             remove
           </button>

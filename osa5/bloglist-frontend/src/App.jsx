@@ -11,10 +11,12 @@ import { initialBlogs } from './reducers/blogReducer'
 import { handleLoggedInUser } from './reducers/loginReducer'
 import { initialUsers } from './reducers/usersReducer'
 import {
-  BrowserRouter as Router, Link,
-  Routes, Route
+  BrowserRouter as Router,
+  Link,
+  Routes,
+  Route,
+  useParams,
 } from 'react-router-dom'
-
 
 const BlogPage = () => {
   const blogFormRef = useRef()
@@ -28,8 +30,7 @@ const BlogPage = () => {
   )
 }
 
-const UsersPage = () => {
-  const users = useSelector(state => state.users)
+const UsersPage = ({ users }) => {
   return (
     <div>
       <h2>Users</h2>
@@ -41,9 +42,11 @@ const UsersPage = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
+          {users.map((user) => (
             <tr key={user.id}>
-              <th>{user.name}   </th>
+              <th>
+                <Link to={`/users/${user.id}`}>{user.name}</Link>
+              </th>
               <th>{user.blogs.length}</th>
             </tr>
           ))}
@@ -53,9 +56,31 @@ const UsersPage = () => {
   )
 }
 
-const App = () => {
+const User = ({ users }) => {
+  const id = useParams().id
+  const user = users.find((user) => user.id === id)
+  console.log('user in app', user)
 
+  if (!user) {
+    return null
+  }
+
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <h3>added blogs</h3>
+      <ul>
+        {user.blogs.map((blog) => (
+          <li key={blog.id}>{blog.title}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+const App = () => {
   const user = useSelector((state) => state.login)
+  const users = useSelector((state) => state.users)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -66,13 +91,11 @@ const App = () => {
     dispatch(initialUsers())
 
     dispatch(handleLoggedInUser())
-
   }, [])
-
 
   if (user === null) {
     return (
-      <div>
+      <div className="containen">
         <Notification />
         <LoginForm />
       </div>
@@ -87,13 +110,14 @@ const App = () => {
           <Link to="/users">users</Link>
         </div>
 
-        <h2>blogs</h2>
+        <h2>Blogs</h2>
         <Notification />
         <UserInfo />
 
         <Routes>
-          <Route path="/" element={<BlogPage/>}/>
-          <Route path="/users" element={<UsersPage/>} />
+          <Route path="/" element={<BlogPage />} />
+          <Route path="/users" element={<UsersPage users={users} />} />
+          <Route path="/users/:id" element={<User users={users} />} />
         </Routes>
       </Router>
     </div>
