@@ -15,6 +15,17 @@ const loginSlice = createSlice({
 
 export const { setUser } = loginSlice.actions
 
+export const handleLoggedInUser = () => {
+  return async (dispatch) => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      blogService.setToken(user.token)
+      dispatch(setUser(user))
+    }
+  }
+}
+
 export const handleLogin = (username, password) => {
   return async (dispatch) => {
     try {
@@ -28,14 +39,10 @@ export const handleLogin = (username, password) => {
   }
 }
 
-export const handleLoggedInUser = () => {
-  return async (dispatch) => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      blogService.setToken(user.token)
-      dispatch(setUser(user))
-    }
+export const handleLogout = () => {
+  return (dispatch) => {
+    window.localStorage.removeItem('loggedBlogappUser')
+    dispatch(setUser(null))
   }
 }
 

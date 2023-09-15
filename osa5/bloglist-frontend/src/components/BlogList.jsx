@@ -1,20 +1,23 @@
 import Blog from './Blog'
 import { useSelector } from 'react-redux'
 
-const BlogList = (props) => {
-  const blogs = useSelector((state) => {
-    return state.blogs
-  })
+const BlogList = () => {
+
+  const user = useSelector((state) => state.login)
+  const blogs = useSelector((state) => state.blogs)
 
   return (
-    <ul>
-      {blogs
-        .slice()
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog key={blog.id} blog={blog} username={props.user.username} />
-        ))}
-    </ul>
+    <div>
+      <h3>Bloglist</h3>
+      <ul>
+        {blogs
+          .slice()
+          .sort((a, b) => b.likes - a.likes)
+          .map((blog) => (
+            <Blog key={blog.id} blog={blog} username={user.username} />
+          ))}
+      </ul>
+    </div>
   )
 }
 

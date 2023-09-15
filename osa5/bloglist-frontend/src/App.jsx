@@ -1,37 +1,74 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Toggable'
-import { useDispatch } from 'react-redux'
 import BlogList from './components/BlogList'
+import UserInfo from './components/UserInfo'
 import { initialBlogs } from './reducers/blogReducer'
-import { setUser, handleLoggedInUser } from './reducers/loginReducer'
-import { useSelector } from 'react-redux'
+import { handleLoggedInUser } from './reducers/loginReducer'
+import { initialUsers } from './reducers/usersReducer'
+import {
+  BrowserRouter as Router, Link,
+  Routes, Route
+} from 'react-router-dom'
+
+
+const BlogPage = () => {
+  const blogFormRef = useRef()
+  return (
+    <div>
+      <Togglable buttonLabel="Add blog" ref={blogFormRef}>
+        <BlogForm />
+      </Togglable>
+      <BlogList />
+    </div>
+  )
+}
+
+const UsersPage = () => {
+  const users = useSelector(state => state.users)
+  return (
+    <div>
+      <h2>Users</h2>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>blogs created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map(user => (
+            <tr key={user.id}>
+              <th>{user.name}   </th>
+              <th>{user.blogs.length}</th>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
 const App = () => {
-  const user = useSelector((state) => state.login)
 
+  const user = useSelector((state) => state.login)
   const dispatch = useDispatch()
 
   useEffect(() => {
     console.log('getting blogs...')
     dispatch(initialBlogs())
-  }, [])
 
-  useEffect(() => {
+    console.log('getting users...')
+    dispatch(initialUsers())
+
     dispatch(handleLoggedInUser())
+
   }, [])
 
-  const handleLogout = (event) => {
-    event.preventDefault()
-    console.log('logging out', user.username)
-
-    window.localStorage.removeItem('loggedBlogappUser')
-    dispatch(setUser(null))
-  }
-
-  const blogFormRef = useRef()
 
   if (user === null) {
     return (
@@ -44,21 +81,21 @@ const App = () => {
 
   return (
     <div className="container">
-      <h2>blogs</h2>
+      <Router>
+        <div>
+          <Link to="/">home</Link>
+          <Link to="/users">users</Link>
+        </div>
 
-      <Notification />
+        <h2>blogs</h2>
+        <Notification />
+        <UserInfo />
 
-      <p style={{ marginBottom: 20 }}>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
-      <Togglable buttonLabel="Add blog" ref={blogFormRef}>
-        <BlogForm />
-      </Togglable>
-
-      <div>
-        <h3>Bloglist</h3>
-        <BlogList user={user} />
-      </div>
+        <Routes>
+          <Route path="/" element={<BlogPage/>}/>
+          <Route path="/users" element={<UsersPage/>} />
+        </Routes>
+      </Router>
     </div>
   )
 }

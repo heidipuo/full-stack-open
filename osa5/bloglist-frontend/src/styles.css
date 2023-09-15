@@ -52,3 +52,9 @@ button {
   border-radius: 6px;
   padding: 3px;
 }
+
+th {
+  padding-right: 30px;
+  font-weight: 400;
+}
+

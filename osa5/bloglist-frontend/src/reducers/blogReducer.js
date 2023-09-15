@@ -44,7 +44,7 @@ export const createBlog = (blog) => {
       if (exception.response.status === 400) {
         dispatch(
           setNotification(
-            'Could not add a blog. Blog title and url are required',
+            'Could not add a blog. Blog title and url are required.',
             9
           )
         )
