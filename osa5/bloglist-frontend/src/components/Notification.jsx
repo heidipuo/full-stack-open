@@ -5,7 +5,7 @@ const Notification = () => {
 
   //className={props.style}
   if (notification) {
-    return <div> {notification} </div>
+    return <div className='alert alert-secondary'> {notification} </div>
   } else {
     return null
   }

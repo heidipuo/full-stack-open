@@ -18,14 +18,12 @@ import {
   Route,
   useParams,
 } from 'react-router-dom'
-import { updateLikes } from './reducers/blogReducer'
-import { deleteBlog } from './reducers/blogReducer'
-import { deleteBlogFromUser } from './reducers/usersReducer'
+
 
 const BlogPage = () => {
   const blogFormRef = useRef()
   return (
-    <div>
+    <div className='row' >
       <Togglable buttonLabel="Add blog" ref={blogFormRef}>
         <BlogForm />
       </Togglable>
@@ -106,30 +104,27 @@ const App = () => {
     )
   }
 
-  /*
-.navi li a {
-  display: block;
-  padding: 8px;
-  
-}
-*/
+
   return (
-    <div className="container">
+    <div className="container-fluid">
       <Router>
         <ul className='navi'>
-          <li><Link className='child' to="/">home</Link></li>
-          <li><Link className='child' to="/users">users</Link></li>
-          <li style={{float: 'right'}}><UserInfo className='child' /></li>
+          <li><Link  to="/" className='text-light'>blogs</Link></li>
+          <li><Link  to="/users" className='text-light'>users</Link></li>
+          <li style={{float: 'right'}}><UserInfo  /></li>
         </ul>
-        
-        <h2>Blogs</h2>
+        <div className='container-sm'>
+        <h2 id='header'>BlogsApp</h2>
         <Notification />
+       
         <Routes>
           <Route path="/" element={<BlogPage />} />
           <Route path="/users" element={<UsersPage users={users} />} />
           <Route path="/users/:id" element={<User users={users} />} />
           <Route path="/blogs/:id" element={<Blog />}/>
         </Routes>
+        
+        </div>
       </Router>
     </div>
   )

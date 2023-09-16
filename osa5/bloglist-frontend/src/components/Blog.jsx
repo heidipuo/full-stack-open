@@ -23,7 +23,7 @@ const Blog = () => {
 
   const addALike = async (event) => {
     event.preventDefault()
-    // voiko vaihtaa spread-syntaksiin???
+
     const updatedBlog = {
       ...blog,
       likes: blog.likes + 1,
@@ -64,10 +64,10 @@ const Blog = () => {
     <div>
       <h3>{blog.title} by {blog.author}</h3>
       <p> <a href={blog.url}>{blog.url}</a></p>
-      <p>{blog.likes} likes <button onClick={addALike}>like</button></p>
+      <p>{blog.likes} likes <button id='normalButton' className='btn btn-primary' onClick={addALike}>like</button></p>
       <p>Added by {blog.user.name}</p>
       {loggedInUsername === blog.user.username && (
-        <button className="removeButton" onClick={setBlogToDelete}>
+        <button id='normalButton' className='btn btn-warning' onClick={setBlogToDelete}>
             remove
         </button>
       )}
@@ -82,7 +82,7 @@ const Blog = () => {
           type='text'
           value={comment}
           onChange={handleCommentChange}/>
-        <button type='submit'>comment</button>
+        <button type='submit' id='normalButton' className='btn btn-primary'>comment</button>
       </form>
     </div>
   )

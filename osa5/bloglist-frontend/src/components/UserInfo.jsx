@@ -12,9 +12,9 @@ const UserInfo = () => {
   }
 
   return (
-    <p style={{ marginBottom: 20 }}>
-      {user.name} logged in <button onClick={logout}>logout</button>
-    </p>
+    <div style={{ marginBottom: 20, color: 'white' }}>
+      {user.name} logged in <button id='normalButton' className='btn btn-primary' onClick={logout}>logout</button>
+    </div>
   )
 }
 

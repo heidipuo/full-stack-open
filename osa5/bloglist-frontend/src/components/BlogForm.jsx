@@ -35,14 +35,15 @@ const BlogForm = () => {
   }
 
   return (
-    <div>
+    <div className='row'>
+      
       <h2>Create a blog</h2>
       <form onSubmit={addBlog}>
         <ul>
           <li>
-            title
+            <div className='col-4'>title</div>
             <input
-              className="title"
+              className="col-8"
               type="text"
               value={title}
               name="Title"
@@ -50,9 +51,9 @@ const BlogForm = () => {
             />
           </li>
           <li>
-            author
+            <div className='col-4'>author</div>
             <input
-              className="author"
+              className="col-8"
               type="text"
               value={author}
               name="Author"
@@ -60,9 +61,9 @@ const BlogForm = () => {
             />
           </li>
           <li>
-            url
+            <div className='col-4'>url</div>
             <input
-              className="url"
+              className="col-8"
               type="text"
               value={url}
               name="url"
@@ -70,8 +71,9 @@ const BlogForm = () => {
             />
           </li>
         </ul>
-        <button type="submit">create</button>
+        <button type="submit" id='normalButton' className='btn btn-primary'>create</button>
       </form>
+   
     </div>
   )
 }

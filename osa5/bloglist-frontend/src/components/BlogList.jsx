@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 const BlogList = () => {
   const blogs = useSelector((state) => state.blogs)
   return (
-    <div>
-      <h3>Bloglist</h3>
+    <div className='col-xl-6'>
+      <h2>Bloglist</h2>
       <ul>
         {blogs
           .slice()
