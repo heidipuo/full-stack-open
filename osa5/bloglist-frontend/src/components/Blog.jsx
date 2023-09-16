@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { deleteBlog, updateLikes } from '../reducers/blogReducer'
+import { deleteBlog, updateLikes, handleComment } from '../reducers/blogReducer'
 import { deleteBlogFromUser } from '../reducers/usersReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -8,6 +8,8 @@ import {
 } from 'react-router-dom'
 
 const Blog = () => {
+  const [comment, setComment] = useState('')
+
   const loggedInUsername = useSelector((state) => state.login.username)
   const user = useSelector((state) =>
     state.users.find((user) => user.username === loggedInUsername)
@@ -21,12 +23,10 @@ const Blog = () => {
 
   const addALike = async (event) => {
     event.preventDefault()
+    // voiko vaihtaa spread-syntaksiin???
     const updatedBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
+      ...blog,
       likes: blog.likes + 1,
-      id: blog.id,
     }
     dispatch(updateLikes(updatedBlog))
   }
@@ -39,6 +39,21 @@ const Blog = () => {
       dispatch(deleteBlogFromUser(blog.id, user))
       navigate('/')
     }
+  }
+
+  const addComment = (event) => {
+    event.preventDefault()
+    const commentObj = {
+      content: comment
+    }
+    dispatch(handleComment(blog.id, commentObj))
+    setComment('')
+
+  }
+
+  const handleCommentChange = (event) => {
+    event.preventDefault()
+    setComment(event.target.value)
   }
 
   if(!blog){
@@ -56,6 +71,19 @@ const Blog = () => {
             remove
         </button>
       )}
+      <h3>Comments</h3>
+      <ul>
+        {blog.comments.map(comment =>
+          <li key={blog.comments.indexOf(comment)}>{comment}</li>
+        )}
+      </ul>
+      <form onSubmit={addComment}>
+        <input
+          type='text'
+          value={comment}
+          onChange={handleCommentChange}/>
+        <button type='submit'>comment</button>
+      </form>
     </div>
   )
 
