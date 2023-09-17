@@ -14,7 +14,7 @@ const morgan = require('morgan')
 
 const mongoUrl = config.MONGODB_URI
 
-logger.info('connecting to', mongoUrl)
+logger.info('connecting to MongoDB')
 mongoose.connect(mongoUrl)
   .then(() => {
     logger.info('connected to MongoDB')
