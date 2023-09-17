@@ -2,10 +2,7 @@ import { useState } from 'react'
 import { deleteBlog, updateLikes, handleComment } from '../reducers/blogReducer'
 import { deleteBlogFromUser } from '../reducers/usersReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  useParams,
-  useNavigate,
-} from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const Blog = () => {
   const [comment, setComment] = useState('')
@@ -16,7 +13,9 @@ const Blog = () => {
   )
 
   const id = useParams().id
-  const blog = useSelector(state => state.blogs).find(blog => blog.id === id)
+  const blog = useSelector((state) => state.blogs).find(
+    (blog) => blog.id === id
+  )
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -44,11 +43,10 @@ const Blog = () => {
   const addComment = (event) => {
     event.preventDefault()
     const commentObj = {
-      content: comment
+      content: comment,
     }
     dispatch(handleComment(blog.id, commentObj))
     setComment('')
-
   }
 
   const handleCommentChange = (event) => {
@@ -56,38 +54,58 @@ const Blog = () => {
     setComment(event.target.value)
   }
 
-  if(!blog){
+  if (!blog) {
     return null
   }
 
   return (
-    <div>
-      <h3>{blog.title} by {blog.author}</h3>
-      <p> <a href={blog.url}>{blog.url}</a></p>
-      <p>{blog.likes} likes <button id='normalButton' className='btn btn-primary' onClick={addALike}>like</button></p>
-      <p>Added by {blog.user.name}</p>
-      {loggedInUsername === blog.user.username && (
-        <button id='normalButton' className='btn btn-warning' onClick={setBlogToDelete}>
+    <div id="blogInfo" className="row">
+      <div className="col-md-6">
+        <h3>
+          {blog.title} by {blog.author}
+        </h3>
+        <p>
+          {' '}
+          <a href={blog.url}>{blog.url}</a>
+        </p>
+        <p>
+          {blog.likes} likes{' '}
+          <button
+            id="normalButton"
+            className="btn btn-primary"
+            onClick={addALike}
+          >
+            like
+          </button>
+        </p>
+        <p>Added by {blog.user.name}</p>
+        {loggedInUsername === blog.user.username && (
+          <button
+            id="attentionButton"
+            className="btn btn-primary"
+            onClick={setBlogToDelete}
+          >
             remove
-        </button>
-      )}
-      <h3>Comments</h3>
-      <ul>
-        {blog.comments.map(comment =>
-          <li key={blog.comments.indexOf(comment)}>{comment}</li>
+          </button>
         )}
-      </ul>
-      <form onSubmit={addComment}>
-        <input
-          type='text'
-          value={comment}
-          onChange={handleCommentChange}/>
-        <button type='submit' id='normalButton' className='btn btn-primary'>comment</button>
-      </form>
+      </div>
+      <div id="commentSection" className="col-6">
+        <h3>Comments</h3>
+
+        <form onSubmit={addComment}>
+          <input type="text" value={comment} onChange={handleCommentChange} />
+          <button type="submit" id="normalButton" className="btn btn-primary">
+            comment
+          </button>
+        </form>
+        <ul id="comments">
+          {blog.comments.map((comment) => (
+            <li key={blog.comments.indexOf(comment)}>{comment}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
-
 }
-
 
 export default Blog

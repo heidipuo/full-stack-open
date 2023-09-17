@@ -13,7 +13,10 @@ const UserInfo = () => {
 
   return (
     <div style={{ marginBottom: 20, color: 'white' }}>
-      {user.name} logged in <button id='normalButton' className='btn btn-primary' onClick={logout}>logout</button>
+      {user.name} logged in{' '}
+      <button id="normalButton" className="btn btn-primary" onClick={logout}>
+        logout
+      </button>
     </div>
   )
 }

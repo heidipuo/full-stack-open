@@ -52,7 +52,7 @@ const LoginForm = () => {
             onChange={handlePasswordChange}
           />
         </div>
-        <button id="login-button" className='btn btn-primary' type="submit">
+        <button id="normalButton" className="btn btn-primary" type="submit">
           login
         </button>
       </form>

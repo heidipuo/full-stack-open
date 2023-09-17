@@ -35,45 +35,51 @@ const BlogForm = () => {
   }
 
   return (
-    <div className='row'>
-      
+    <div id="addBlog" className="row">
       <h2>Create a blog</h2>
       <form onSubmit={addBlog}>
         <ul>
           <li>
-            <div className='col-4'>title</div>
-            <input
-              className="col-8"
-              type="text"
-              value={title}
-              name="Title"
-              onChange={(event) => setTitle(event.target.value)}
-            />
+            <div className="form-group col-10">
+              <label className="">title</label>
+              <input
+                className="form-control"
+                type="text"
+                value={title}
+                name="Title"
+                onChange={(event) => setTitle(event.target.value)}
+              />
+            </div>
           </li>
           <li>
-            <div className='col-4'>author</div>
-            <input
-              className="col-8"
-              type="text"
-              value={author}
-              name="Author"
-              onChange={(event) => setAuthor(event.target.value)}
-            />
+            <div className="form-group col-10">
+              <label className="col-1">author</label>
+              <input
+                className="form-control"
+                type="text"
+                value={author}
+                name="Author"
+                onChange={(event) => setAuthor(event.target.value)}
+              />
+            </div>
           </li>
           <li>
-            <div className='col-4'>url</div>
-            <input
-              className="col-8"
-              type="text"
-              value={url}
-              name="url"
-              onChange={(event) => setUrl(event.target.value)}
-            />
+            <div className="form-group col-10">
+              <label className="col-1">url</label>
+              <input
+                className="form-control"
+                type="text"
+                value={url}
+                name="url"
+                onChange={(event) => setUrl(event.target.value)}
+              />
+            </div>
           </li>
         </ul>
-        <button type="submit" id='normalButton' className='btn btn-primary'>create</button>
+        <button type="submit" id="attentionButton" className="btn btn-primary">
+          create
+        </button>
       </form>
-   
     </div>
   )
 }

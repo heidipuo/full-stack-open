@@ -1,6 +1,5 @@
-
 .container-fluid {
-  background-color: #F8F0E5;
+  background-color: #ebe4d1;
 }
 
 ul {
@@ -9,26 +8,36 @@ ul {
 }
 
 p {
-  margin: 3px;
+  margin-bottom: 20px;
 }
 
 button {
   margin-left: 5px;
   margin-top: 2px;
+  margin-right: 20px;
 }
 
 #normalButton {
-
-  background-color: #EADBC8;
+  background-color: #b4b4b3;
   border-color: rgb(70, 70, 70);
   color: rgb(70, 70, 70);
 }
 
+#attentionButton {
+  background-color: rgb(16, 83, 124);
+  color: aliceblue;
+}
+
 #header {
   font-size: 5em;
-  margin: 50px 0px 100px 0px;
+  margin: 50px 0px 50px 0px;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#addBlog {
+  margin-right: 40px;
+  padding-top: 40px;
 }
 
 .success {
@@ -51,21 +60,43 @@ button {
   margin-bottom: 10px;
 }
 
-
 .blog {
-  background-color: beige;
+  background-color: #eadbc8;
   padding: 7px;
+  padding-left: 20px;
   border-style: solid;
   border-color: gray;
+  border-radius: 5px;
   border-width: 1px;
   margin-top: 5px;
 }
 
-.removeButton {
-  background-color: rgb(16, 83, 124);
-  color: aliceblue;
-  border-radius: 6px;
-  padding: 3px;
+#blogInfo {
+  padding: 0px 50px 50px 50px;
+  border: 1px groove grey;
+  border-radius: 25px;
+  background-color: #f7efdb;
+}
+
+#usersPage {
+  padding: 0px 50px 50px 50px;
+  border: 1px groove grey;
+  border-radius: 25px;
+  background-color: #f7efdb;
+}
+
+#singleUser {
+  padding: 0px 50px 50px 50px;
+  border: 1px groove grey;
+  border-radius: 25px;
+  background-color: #f7efdb;
+  display: flex;
+  justify-content: center;
+}
+
+#comments {
+  font-style: italic;
+  margin-top: 15px;
 }
 
 th {
@@ -73,8 +104,14 @@ th {
   font-weight: 400;
 }
 
+h2 {
+  margin-bottom: 20px;
+  margin-top: 40px;
+}
+
 h3 {
   font-size: 1.4em;
+  margin: 50px 0px 30px 0px;
 }
 
 .navi {
@@ -82,7 +119,7 @@ h3 {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #0F2C59;
+  background-color: #26577c;
 }
 
 .navi li {
@@ -92,7 +129,5 @@ h3 {
 }
 
 .container-sm {
-  background-color: #F8F0E5;
+  min-height: 900px;
 }
-
-
