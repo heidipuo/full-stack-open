@@ -93,10 +93,6 @@ let books = [
   },
 ]
 
-/*
-  you can remove the placeholder query once your first one has been implemented 
-*/
-
 const typeDefs = `
   
 type Author {
@@ -117,7 +113,7 @@ type Book {
 type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String): [Book!]!
+    allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
 `
@@ -127,9 +123,17 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: (root, args) => {
-      return args.author 
-        ? books.filter(book => book.author === args.author) 
-        : books
+      if(args.author && args.genre) {
+        return books
+          .filter(book => book.author === args.author)
+          .filter(book => book.genres.includes(args.genre))  
+      }else if(args.author) {
+        return books.filter(book => book.author === args.author)
+      }else if(args.genre) {
+        return books.filter(book => book.genres.includes(args.genre))
+      }else{
+        return books
+      }
     },
     allAuthors: () => authors
   },
