@@ -116,6 +116,15 @@ type Query {
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
+
+type Mutation {
+  addBook(
+    title: String!
+    author: String!
+    published: Int!
+    genres: [String]!
+  ): Book
+}
 `
 
 const resolvers = {
@@ -141,6 +150,16 @@ const resolvers = {
     bookCount: (root) => {
       const booksByAuthor = books.filter(book => book.author === root.name)
       return booksByAuthor.length
+    }
+  }, 
+  Mutation: {
+    addBook: (root, args) => {
+      books = books.concat(args)
+
+      if(!authors.find(author => author.name === args.author)) {
+        authors = authors.concat({name: args.author})
+      }
+      return args
     }
   }
 }
