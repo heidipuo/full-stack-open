@@ -161,7 +161,7 @@ const resolvers = {
       books = books.concat(args)
 
       if(!authors.find(author => author.name === args.author)) {
-        authors = authors.concat({name: args.author})
+        authors = authors.concat({name: args.author, id: Math.floor(Math.random() * 100000)})
       }
       return args
     },
