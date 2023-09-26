@@ -93,12 +93,24 @@ const resolvers = {
   Mutation: {
     addBook: async (root, args) => {
       let author = await Author.findOne({name: args.author})
-      
+      console.log(author)
       if(!author) {
         const newAuthor = new Author({
             name: args.author
           })
-        newAuthor.save()
+        
+        try{
+          newAuthor.save()
+        }catch (error) {
+          throw new GraphQLError('Saving author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT', 
+              invalidArgs: args.author, 
+              error
+            }
+          })
+        }
+
         author = await Author.findOne({name: args.author})   
       }
       
@@ -107,7 +119,7 @@ const resolvers = {
       try{
         await book.save()  
       } catch (error) {
-        throw new GraphQLError('Saving person failed', {
+        throw new GraphQLError('Saving book failed', {
           extensions: {
             code: 'BAD_USER_INPUT', 
             invalidArgs: args.title, 
