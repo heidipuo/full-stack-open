@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 const Book = require('./models/book')
 const Author = require('./models/author')
+const { GraphQLError } = require('graphql')
 
 require('dotenv').config()
 
@@ -62,17 +63,27 @@ type Mutation {
 const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
-    authorCount: () => authors.length,
+    authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      return Book.find({})
-
+      console.log(args.genre)
+     if(args.author && args.genre) {
+        const author = await Author.findOne({name: args.author})
+        return Book.find({author: author.id, genres: args.genre})
+      }else if(args.author) {
+        const author = await Author.findOne({name: args.author})
+        return Book.find({author: author.id})
+      }else if(args.genre) {
+        return Book.find({genres: args.genre})
+      }else{
+        console.log(Book.find({}))
+        return Book.find({})
+      }
     },
     allAuthors: async () => Author.find({})
   },
   Book: {
     author: async (root) => {
       const author = await Author.findOne({_id: root.author.toString()})
- 
       return {
         name: author.name,
         born: author.born,
@@ -81,7 +92,6 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      
       let author = await Author.findOne({name: args.author})
       
       if(!author) {
@@ -93,17 +103,30 @@ const resolvers = {
       }
       
       const book = new Book({ ...args, author: author.id })
-      return book.save()    
+      
+      try{
+        await book.save()  
+      } catch (error) {
+        throw new GraphQLError('Saving person failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT', 
+            invalidArgs: args.title, 
+            error
+          }
+        })
+      }
+      
+      return book
     },
-    editAuthor: (root, args) => {
-      const author = authors.find(author => author.name === args.name)
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({name: args.name})
+    
       if(!author) {
         return null
       }
 
-      const updatedAuthor = {...author, born: args.setBornTo}
-      authors = authors.map(author => author.name === args.name ? updatedAuthor : author)
-      return updatedAuthor
+      author.born = args.setBornTo
+      return author.save()
     }
   }
 }
