@@ -63,7 +63,7 @@ type Mutation {
     title: String!
     author: String!
     published: Int!
-    genres: [String]!
+    genres: [String!]!
   ): Book
   editAuthor(
     name: String!
