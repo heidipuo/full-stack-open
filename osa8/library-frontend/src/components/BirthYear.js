@@ -24,8 +24,6 @@ const BirthYear = ({ authors, show }) => {
   const handleChange = (event) => {
     event.preventDefault()
     setName(event.target.value)
-    console.log('???', name)
-  
   }
    
  if (!show) {
