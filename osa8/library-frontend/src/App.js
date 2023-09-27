@@ -3,9 +3,10 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
-import { useApolloClient, useQuery} from '@apollo/client'
+import { useApolloClient, useQuery, useSubscription} from '@apollo/client'
 import { ALL_AUTHORS } from './queries'
 import { ALL_BOOKS } from './queries'
+import { BOOK_ADDED } from './queries'
 import BirthYear from './components/BirthYear'
 
 
@@ -17,12 +18,26 @@ const App = () => {
   const resultBooks = useQuery(ALL_BOOKS)
   const client = useApolloClient()
 
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      console.log(data)
+      const addedBook = data.data.bookAdded
+      console.log(addedBook)
+      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(addedBook),
+        }
+      })
+    }
+  })
+
   const logout = () => {
     setToken(null) 
     localStorage.clear()
     client.resetStore()
     setPage('login')
   }
+
 
 if(resultAuthor.loading || resultBooks.loading) {
   return <div>loading...</div>
