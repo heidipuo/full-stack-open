@@ -1,24 +1,62 @@
-const calculateBmi = (height: number, weight: number): string => {
+interface Measures {
+  height: number,
+  weight: number
+}
+
+const parseArguments = (args: string[]): Measures => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  if (args.length > 4) throw new Error('Too many arguments');
+
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      height: Number(args[2]),
+      weight: Number(args[3])
+    }
+  } else {
+    throw new Error('Provided values were not numbers!');
+  }
+}
+
+const calculateBmi = (height: number, weight: number) => {
   const heightInMeters = height / 100
   const bmi = weight / (heightInMeters * heightInMeters)
   switch (true) {
     case (bmi < 15):
-      return 'Morbid underweight';
+      console.log( 'Morbid underweight');
+      break;
     case (bmi < 18):
-      return 'Considerable underweight';
+      console.log( 'Considerable underweight');
+      break;
     case (bmi < 19):
-      return 'Moderate underweight';
+      console.log( 'Moderate underweight');
+      break;
     case (bmi < 25):
-      return 'Normal weight';
+      console.log( 'Normal weight');
+      break;
     case (bmi < 30):
-      return 'Moderate obesity';
+      console.log( 'Moderate obesity');
+      break;
     case (bmi < 35):
-      return 'Considerable obesity';
+      console.log( 'Considerable obesity');
+      break;
     case (bmi < 40):
-      return 'Difficult obesity';
+      console.log( 'Difficult obesity');
+      break;
+    case (bmi >= 40):
+      console.log( 'Morbid obesity');
+      break;
     default:
-      return 'Morbid obesity'
+      console.log( 'Could not define value')
   }
 }
 
-console.log(calculateBmi(180, 74))
+try {
+  const { height, weight } = parseArguments(process.argv);
+  calculateBmi(height, weight);
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened.'
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+  console.log(errorMessage);
+}

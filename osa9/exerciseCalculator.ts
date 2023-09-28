@@ -8,6 +8,24 @@ interface Result {
     average: number
 }
 
+interface Values {
+    exercises: number[],
+    target: number
+}
+
+const parseArgs = (args: string[]): Values  => {
+    const exercises = args.slice(3).map(e => Number(e))
+   
+    if (!isNaN(Number(args[2])) && !exercises.includes(NaN) ) {
+      return {
+        exercises: exercises,
+        target: Number(args[2])
+      }
+    } else {
+      throw new Error('Provided values were not numbers!');
+    }
+  }
+
 const calculateExercices = (exercises: number[], target: number): Result => { 
     const allHours = exercises.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
     const average = allHours / exercises.length
@@ -36,4 +54,14 @@ const calculateExercices = (exercises: number[], target: number): Result => {
     }
 }
 
-console.log(calculateExercices([3, 0, 2, 4.5, 0, 3, 1], 2.8))
+try {
+   const {target, exercises} = parseArgs(process.argv)
+    console.log(calculateExercices(exercises, target))
+  } catch (error: unknown) {
+    let errorMessage = 'Something bad happened.'
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    console.log(errorMessage);
+  }
+  
