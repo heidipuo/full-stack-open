@@ -13,7 +13,6 @@ import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, ME } from './queries'
 const App = () => {
   const [page, setPage] = useState('login')
   const [token, setToken] = useState(null)
-  const [ user, setUser ] = useState(null)
   const resultAuthor = useQuery(ALL_AUTHORS)
   const resultBooks = useQuery(ALL_BOOKS)
   const resultUser = useQuery(ME)
@@ -22,7 +21,6 @@ const App = () => {
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded
-      console.log('added', addedBook)
       window.alert(`New book ${addedBook.title} added to library`)
       client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
         return {
@@ -39,6 +37,7 @@ const App = () => {
       resultUser.stopPolling()
     }, 3000)
   }, [token])
+
 
   const logout = () => {
     setToken(null) 

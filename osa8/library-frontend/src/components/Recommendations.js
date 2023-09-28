@@ -3,15 +3,13 @@ import { BOOKS_BY_GENRE } from "../queries"
 import { useEffect, useState } from "react"
 
 const Recommendations = (props) => {
-    console.log('recom', props)
+   
     const [ books, setBooks ] = useState([])
 
     const result = useQuery(BOOKS_BY_GENRE, {
         skip: !props.show,
         variables: {genre: props.favoriteGenre}
       })
-    
-    console.log('result', result.data)
 
     useEffect(() => {
         if (result.data) {
