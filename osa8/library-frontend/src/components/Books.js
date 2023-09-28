@@ -5,8 +5,8 @@ import { useState, useEffect } from "react"
 const Books = (props) => {
   const [ genre, setGenre ] = useState('')
   const [ genres, setGenres ] = useState([])
-  const [books, setBooks ] =useState(props.books)
-  
+  const [books, setBooks ] = useState(props.books)
+
   const result = useQuery(BOOKS_BY_GENRE, {
     skip: !props.show,
     variables: {genre}
@@ -14,9 +14,10 @@ const Books = (props) => {
 
   useEffect(() => {
     if (result.data) {
-    setBooks(result.data.allBooks)
+    setBooks(result.data.allBooks) 
     const genreList = [...new Set(props.books.map(book => book.genres).flat())]
-    setGenres(genreList)}
+    setGenres(genreList)
+  } 
   }, [result.data])
 
   if (!props.show) {
