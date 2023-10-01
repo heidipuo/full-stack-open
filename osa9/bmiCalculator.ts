@@ -1,62 +1,31 @@
-interface Measures {
-  height: number,
-  weight: number
-}
 
-const parseArguments = (args: string[]): Measures => {
-  if (args.length < 4) throw new Error('Not enough arguments');
-  if (args.length > 4) throw new Error('Too many arguments');
+export const calculateBmi = (height: number, weight: number) => {
+ if (isNaN(height) || isNaN(weight)) throw new Error('not a number')
+ if (!height || !weight) throw new Error('value missing')
 
-  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
-    return {
-      height: Number(args[2]),
-      weight: Number(args[3])
-    }
-  } else {
-    throw new Error('Provided values were not numbers!');
-  }
-}
-
-const calculateBmi = (height: number, weight: number) => {
   const heightInMeters = height / 100
   const bmi = weight / (heightInMeters * heightInMeters)
   switch (true) {
     case (bmi < 15):
-      console.log( 'Morbid underweight');
-      break;
+      return ( 'Morbid underweight');
+      
     case (bmi < 18):
-      console.log( 'Considerable underweight');
-      break;
+      return ( 'Considerable underweight');
     case (bmi < 19):
-      console.log( 'Moderate underweight');
-      break;
+      return ( 'Moderate underweight');
     case (bmi < 25):
-      console.log( 'Normal weight');
-      break;
+      return ( 'Normal weight');
     case (bmi < 30):
-      console.log( 'Moderate obesity');
-      break;
+      return ( 'Moderate obesity');
     case (bmi < 35):
-      console.log( 'Considerable obesity');
-      break;
+      return ( 'Considerable obesity');
     case (bmi < 40):
-      console.log( 'Difficult obesity');
-      break;
+      return ( 'Difficult obesity');
     case (bmi >= 40):
-      console.log( 'Morbid obesity');
-      break;
+      return ( 'Morbid obesity');
     default:
-      console.log( 'Could not define value')
-  }
+      return ( 'Could not define values' )
 }
+ }
 
-try {
-  const { height, weight } = parseArguments(process.argv);
-  calculateBmi(height, weight);
-} catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
-  }
-  console.log(errorMessage);
-}
+
