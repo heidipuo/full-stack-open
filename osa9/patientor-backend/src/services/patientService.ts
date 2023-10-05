@@ -1,4 +1,5 @@
 import patients from "../../data/patientData";
+import { v1 as uuid } from 'uuid';
 
 import { Patient, NonSensitivePatientInfo, NewPatient } from "../types";
 
@@ -17,9 +18,10 @@ const getNonSensitivePatients = (): NonSensitivePatientInfo[] => {
 };
 
 const addPatient = ( patient: NewPatient): Patient => {
-    
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const id: string = uuid() as string;
     const newPatient = {
-        id: Math.floor(Math.random() * 10000000).toString(),
+        id: id,
         ...patient
     };
 
