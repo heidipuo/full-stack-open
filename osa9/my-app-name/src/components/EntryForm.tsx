@@ -1,6 +1,7 @@
 import { NewDiaryEntry, Visibility, Weather, DiaryEntry } from '../types'
 import { useState } from 'react'
 import diaryEntryService from '../services/entries'
+import axios from 'axios'
 
 interface SetEntriesProps {
     setEntries: React.Dispatch<React.SetStateAction<DiaryEntry[]>>,
@@ -8,14 +9,14 @@ interface SetEntriesProps {
 }
 
 const EntryForm = (props: SetEntriesProps) => {
-    console.log('props', props)
     const [date, setDate] = useState('')
     const [visibility, setVisibility] = useState('')
     const [weather, setWeather] = useState('')
     const [comment, setComment] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
 
-    const addEntry = (event: React.SyntheticEvent) => {
+    const addEntry = async (event: React.SyntheticEvent) => {
         event.preventDefault()
         
         const visibilityTyped: Visibility = visibility as Visibility
@@ -27,12 +28,26 @@ const EntryForm = (props: SetEntriesProps) => {
             comment: comment
         }
 
-        diaryEntryService.createEntry(entry);
         
+       try{
+        await diaryEntryService.createEntry(entry);
         props.setEntries(props.entries.concat({
             ...entry,
             id: Math.floor(Math.random() * 100000)
         }))
+    
+    }catch (error) {
+        if (axios.isAxiosError(error)) {
+            setErrorMessage(error.response?.data)
+            setTimeout(() => {
+                setErrorMessage('');
+            }, 3000);
+          } else {
+            console.error(error);
+          }
+      }
+        
+       
 
         setDate('')
         setVisibility('')
@@ -40,8 +55,12 @@ const EntryForm = (props: SetEntriesProps) => {
         setComment('')
     }
     
+    
+    
     return (
         <>
+        <p style={{color: 'red'}}>{errorMessage}</p>
+        
         <form onSubmit={addEntry}>
             <div>
                 <label htmlFor="date" >Date</label>
@@ -60,7 +79,7 @@ const EntryForm = (props: SetEntriesProps) => {
                     onChange={(event) => setVisibility(event.target.value)}/>
             </div>
             <div>
-                <label htmlFor="weather" >weather</label>
+                <label htmlFor="weather" >Weather</label>
                 <input 
                     type="text" 
                     value={weather}
@@ -75,7 +94,7 @@ const EntryForm = (props: SetEntriesProps) => {
                     name="comment"
                     onChange={(event) => setComment(event.target.value)}/>
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit">Add flight</button>
         </form>
         </>
     )

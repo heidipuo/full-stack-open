@@ -9,7 +9,19 @@ const getAll = async () => {
 }
 
 const createEntry = async (entry: NewDiaryEntry) => {
-    await axios.post(baseUrl, entry);
+    const response = await axios.post(baseUrl, entry);
+    return response.data;
+    /*try{
+    const response = await axios.post(baseUrl, entry);
+    return response.data;
+    }catch (error) {
+    if (axios.isAxiosError(error)) {
+        console.log(error.response?.status)
+        return error.response?.data
+      } else {
+        console.error(error);
+      }
+}*/
 }
 
 export default {
