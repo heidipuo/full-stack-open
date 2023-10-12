@@ -1,4 +1,4 @@
-import { NewPatient, Gender } from "./types";
+import { NewPatient, Gender, Entry } from "./types";
 
 const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;
@@ -33,6 +33,33 @@ const parseGender = (gender: unknown): Gender => {
     return gender;
 };
 
+const parseDiagnosesCodes = (codes: unknown) => {
+    if (!codes) {
+        return [];
+    }
+    return codes;
+};
+
+
+const parseEntries = (entries: unknown): Entry[] => {
+    if (!entries) {
+        return [];
+    }
+
+    if(!Array.isArray(entries)){
+        throw new Error('Incorrect entries');
+    }
+
+    const entryList = entries.map(entry => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const newEntry: Entry = {
+        diagnosisCodes: parseDiagnosesCodes(entry.diagnosisCodes),
+        ...entry
+        };
+        return newEntry;
+    });
+    return entryList;
+};
 
 
 
@@ -41,13 +68,14 @@ const toNewPatient = (object: unknown): NewPatient => {
         throw new Error('Incorrect or missing data');
       }
     
-    if ('name' in object && 'dateOfBirth' in object && 'ssn' in object && 'gender' in object && 'occupation' in object) {
+    if ('name' in object && 'dateOfBirth' in object && 'ssn' in object && 'gender' in object && 'occupation' in object && 'entries' in object) {
         const newPatient: NewPatient = {
             name: parseStringElement(object.name, 'name'),
             dateOfBirth: parseDateOfBirth(object.dateOfBirth),
             ssn: parseStringElement(object.ssn, 'ssn'),
             gender: parseGender(object.gender),
             occupation: parseStringElement(object.occupation, 'occupation'),
+            entries: parseEntries(object.entries)
         };
     return newPatient;
     }

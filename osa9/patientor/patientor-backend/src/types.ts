@@ -4,6 +4,16 @@ export interface Diagnosis {
     latin?: string;
 }
 
+export interface Patient {
+    id: string;
+    name: string;
+    dateOfBirth: string;
+    ssn: string;
+    gender: Gender;
+    occupation: string;
+    entries: Entry[]
+}
+
 interface BaseEntry {
     id: string;
     description: string;
@@ -51,19 +61,11 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit
 
 export type EntryWithoutId = UnionOmit<Entry, 'id'>;
 
-export interface Patient {
-    id: string;
-    name: string;
-    dateOfBirth: string;
-    ssn: string;
-    gender: Gender;
-    occupation: string;
-    entries: Entry[]
-}
+
 
 export type NonSensitivePatientInfo = Omit<Patient, 'ssn' | 'entries'>;
 
-export type NewPatient = Omit<Patient, 'id' | 'entries'>;
+export type NewPatient = Omit<Patient, 'id'>;
 
 export enum Gender {
     Female = 'female', 

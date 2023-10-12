@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link, Routes, useMatch } from "react-ro
 import { Button, Divider, Container, Typography } from '@mui/material';
 
 import { apiBaseUrl } from "./constants";
-import { Gender, Patient } from "./types";
+import { Patient } from "./types";
 
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
@@ -25,7 +25,6 @@ const App = () => {
 
   
   const match = useMatch('/patients/:id')
-  console.log(match);
   const patient = match
     ? patients.find(p => p.id === match.params.id) as Patient
     : null
