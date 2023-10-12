@@ -1,15 +1,21 @@
 import { Typography } from "@mui/material";
-import { Entry, Patient } from "../../types";
+import { Diagnosis, Entry, Patient } from "../../types";
 import SetGenderIcon from "./SetGenderIcon";
 
 
 interface Props {
-    patient: Patient | null
+    patient: Patient | null;
+    diagnoses: Diagnosis[]
 }
 
-const PatientPage = ({patient}: Props) => {
+const PatientPage = ({patient, diagnoses}: Props) => {
     if (!patient) {
         return <>Patient not found</>
+    }
+
+    const setDiagnosis = (code: string) => {
+        const diagnosis: Diagnosis = diagnoses.find(d => d.code === code) as Diagnosis
+        return diagnosis.name
     }
 
     return (
@@ -28,7 +34,7 @@ const PatientPage = ({patient}: Props) => {
                 <div key={entry.id}><b>{entry.date}</b> {entry.description}
                     <ul >
                         {entry.diagnosisCodes.map(code => (
-                        <li key={code}>{code}</li>
+                        <li key={code}>{code} {setDiagnosis(code)}</li>
                         ))}
                     </ul>
                 </div>
