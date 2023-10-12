@@ -5,7 +5,11 @@ import toNewPatient from '../utils';
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-    res.send(patientService.getNonSensitivePatients());
+  res.send(patientService.getNonSensitivePatients());
+});
+
+router.get('/:id', (req, res) => {
+  res.send(patientService.getPatientById(req.params.id));
 });
 
 router.post('/', (req, res) => {
@@ -21,5 +25,7 @@ router.post('/', (req, res) => {
     res.status(400).send(errorMessage);
   }
 });
+
+
 
 export default router;
