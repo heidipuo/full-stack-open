@@ -34,6 +34,8 @@ const parseGender = (gender: unknown): Gender => {
 };
 
 
+
+
 const toNewPatient = (object: unknown): NewPatient => {
     if ( !object || typeof object !== 'object' ) {
         throw new Error('Incorrect or missing data');
