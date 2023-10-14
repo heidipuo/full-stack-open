@@ -1,6 +1,8 @@
 import { Typography } from "@mui/material";
 import { Diagnosis, Entry, Patient } from "../../types";
+import EntryDetails from "./EntryDetails";
 import SetGenderIcon from "./SetGenderIcon";
+import React from "react";
 
 
 interface Props {
@@ -11,11 +13,6 @@ interface Props {
 const PatientPage = ({patient, diagnoses}: Props) => {
     if (!patient) {
         return <>Patient not found</>
-    }
-
-    const setDiagnosis = (code: string) => {
-        const diagnosis: Diagnosis = diagnoses.find(d => d.code === code) as Diagnosis
-        return diagnosis.name
     }
 
     return (
@@ -29,21 +26,17 @@ const PatientPage = ({patient, diagnoses}: Props) => {
         <Typography variant="h6" style={{marginTop: "1em", marginBottom: "0.5em" }}>
             Entries
         </Typography>
-        <Typography variant="body1">
+        <div style={{ fontFamily: "sans-serif"}}>
             {Object.values(patient.entries).map((entry: Entry) => (
-                <div key={entry.id}><b>{entry.date}</b> {entry.description}
-                    <ul >
-                        {entry.diagnosisCodes.map(code => (
-                        <li key={code}>{code} {setDiagnosis(code)}</li>
-                        ))}
-                    </ul>
-                </div>
+                <EntryDetails entry={entry} diagnoses={diagnoses}/>
                 
             )
             )}
-        </Typography>
+        </div>
         </div>
     )
 }
 
 export default PatientPage;
+
+
