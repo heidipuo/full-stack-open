@@ -3,7 +3,6 @@ import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import HealthCheckRatingSymbol from "./HealtRatingSymbol";
 import { commonStyles, setDiagnosis } from "./utils";
 
-
 import Box from '@mui/material/Box';
 
 

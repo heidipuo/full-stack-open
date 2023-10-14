@@ -1,6 +1,6 @@
 import { HospitalEntry, Diagnosis } from "../../types";
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import { commonStyles } from "./utils";
+import { commonStyles, setDiagnosis } from "./utils";
 
 import Box from '@mui/material/Box';
 
@@ -12,12 +12,6 @@ interface Props {
 
 const Hospital = ({entry, diagnoses}: Props) => {
     
-    const setDiagnosis = (code: string) => {
-        console.log(code)
-        const diagnosis: Diagnosis = diagnoses.find(d => d.code === code) as Diagnosis
-        console.log(diagnosis)
-        return diagnosis.name
-    }
 
     return (
         <Box sx={{...commonStyles}}>
@@ -25,7 +19,7 @@ const Hospital = ({entry, diagnoses}: Props) => {
         <p>{entry.description}</p>
         <ul >
             {entry.diagnosisCodes.map(code => (
-            <li key={code}>{code} {setDiagnosis(code)} </li>
+            <li key={code}>{code} {setDiagnosis(code, diagnoses)} </li>
             ))}
         </ul>
         <p>Diagnosed by {entry.specialist}</p>
